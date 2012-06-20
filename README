@@ -1,0 +1,4 @@
+Git repo for the JAVA bit of DID_project. 
+
+Sources that manipulate the data read with Ruby, run SPARQL queries agains DBpedia and updates DB. 
+
