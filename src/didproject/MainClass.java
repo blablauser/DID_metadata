@@ -4,7 +4,9 @@ package didproject;
 public class MainClass {
 	public static void main (String args[]){
 		  // YAAAAAY!!!
-		String resource = "<http://dbpedia.org/resource/Debbie_Harry>";
+		// read all resources from DB
+		
+		String resource = "http://dbpedia.org/resource/Debbie_Harry";
 	    
 		String sparqlQueryString1= 
 	    	    "PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
@@ -21,7 +23,7 @@ public class MainClass {
 	    		"PREFIX dbo: <http://dbpedia.org/ontology/>" +
 	    		
 	    		"SELECT ?name ?birth ?description ?person ?subject WHERE {" +
-	    		resource +" foaf:name ?name . " +
+	    		"<"+resource+"> foaf:name ?name . " +
 	    		"     ?person foaf:name ?name ." +
 	    		"     ?person dbo:birthDate ?birth ." +
 	    		"     ?person rdfs:comment ?description ." +
