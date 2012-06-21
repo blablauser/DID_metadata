@@ -10,7 +10,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 
 public class SparqlQueryProcesser {
-	public static void runQuery(String queryString) {
+	public static void getMetadata(String queryString) {
 
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(
@@ -22,7 +22,7 @@ public class SparqlQueryProcesser {
 		Document xmlFile = StringToXML.parse(xmlStr);
 
 		if (xmlFile == null)
-			System.out.println("Doesn't work.");
+			System.out.println("NULL DOCUMENT ERROR.");
 		else {
 			NodeList resultList = xmlFile.getElementsByTagName("result");
 			for (int i = 0; i < resultList.getLength(); i++) {
@@ -45,15 +45,6 @@ public class SparqlQueryProcesser {
 						System.out.println(value);
 						
 					} else if (attribute.equals("birth")) {
-						NodeList childList = binding.getElementsByTagName("literal").item(0).getChildNodes();
-						Node child = childList.item(0);
-						
-						while (child.getNodeType() != Node.TEXT_NODE)
-							child = child.getNextSibling();
-						
-						String value = child.getNodeValue();
-						System.out.println(value);
-					} else if (attribute.equals("description")) {
 						NodeList childList = binding.getElementsByTagName("literal").item(0).getChildNodes();
 						Node child = childList.item(0);
 						
@@ -86,11 +77,51 @@ public class SparqlQueryProcesser {
 			}
 
 		}
-		System.out.println("YAY!.");
 
 		qexec.close();
-		// System.out.println(xmlStr.trim());
-		// System.out.println(emptyQuery);
+	}
+	
+	public static void getCategories(String queryString) {
+
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(
+				"http://dbpedia.org/sparql", query);
+
+		ResultSet results = qexec.execSelect();
+
+		String xmlStr = ResultSetFormatter.asXMLString(results);
+		Document xmlFile = StringToXML.parse(xmlStr);
+
+		if (xmlFile == null)
+			System.out.println("NULL DOCUMENT ERROR.");
+		else {
+			NodeList resultList = xmlFile.getElementsByTagName("result");
+			for (int i = 0; i < resultList.getLength(); i++) {
+				// Get element
+				Element element = (Element) resultList.item(i);
+				NodeList bindingsList = element.getElementsByTagName("binding");
+
+				for (int j = 0; j < bindingsList.getLength(); j++) {
+					Element binding = (Element) bindingsList.item(j);
+					String attribute = binding.getAttribute("name");
+                   
+					if (attribute.equals("subject")) {
+						NodeList childList = binding.getElementsByTagName("uri").item(0).getChildNodes();
+						Node child = childList.item(0);
+						
+						while (child.getNodeType() != Node.TEXT_NODE)
+							child = child.getNextSibling();
+						
+						String value = child.getNodeValue();
+						System.out.println(value);
+					}
+
+				}
+			}
+
+		}
+
+		qexec.close();
 	}
 	// public static boolean checkAttribute(Element binding, String attribute,
 	// String value, String tag){
