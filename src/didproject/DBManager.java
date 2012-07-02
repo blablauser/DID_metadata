@@ -2,6 +2,7 @@ package didproject;
 
 import java.sql.*;
 import java.util.*;
+
 //import DBaccess;
 
 //******************************************************************************
@@ -28,19 +29,19 @@ class DBManager {
 
 	}
 
-	public int exists(String tblName, String field, String value) {
+	public int exists(String returnField, String tblName, String field, String value) {
 		int id = -1;
 
 		ResultSet rs;
 		try {
 			DBaccess.connect(host, port, user, password, dbname);
-			rs = DBaccess.retrieve("SELECT `" + tblName + "ID` FROM `"
+			rs = DBaccess.retrieve("SELECT `" + returnField + "` FROM `"
 					+ tblName + "` WHERE " + field + "='" + value + "'");
 			if (!rs.first()) {
 				//System.err.println("<exists> ERROR: No results.");
 				id = -1;
 			} else {
-				id = Integer.parseInt(rs.getString(tblName + "ID"));
+				id = Integer.parseInt(rs.getString(returnField));
 			}
 		} catch (Exception e) {
 			System.err.println("Error parsing ID from <exists>");

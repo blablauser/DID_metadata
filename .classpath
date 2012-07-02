@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JenaLibs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JenaLib"/>
 	<classpathentry kind="lib" path="/home/MSC11/balusesa/Documents/mysql-connector-java-5.1.20/mysql-connector-java-5.1.20-bin.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commonLang"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

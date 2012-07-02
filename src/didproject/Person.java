@@ -83,15 +83,7 @@ public class Person {
 	public String createDBpediaLink(String wikiLink) {
 		wikiLink = wikiLink.replaceAll("http://en.wikipedia.org/wiki/",
 				"http://dbpedia.org/resource/");
-		wikiLink = wikiLink.replaceAll(" ", "%20");
-		wikiLink = wikiLink.replaceAll("\"", "%22");
-		wikiLink = wikiLink.replaceAll("\'", "%27");
-		wikiLink = wikiLink.replaceAll("\\(", "%28");
-		wikiLink = wikiLink.replaceAll("\\)", "%29");
-		wikiLink = wikiLink.replaceAll("\\*", "%2A");
-		wikiLink = wikiLink.replaceAll("\\+", "%2B");
-		wikiLink = wikiLink.replaceAll(",", "%2C");
-		wikiLink = wikiLink.replaceAll("-", "%2D");
+		wikiLink = StringEscape.escapeUrl(wikiLink);
 		return wikiLink;
 	}
 
@@ -99,18 +91,18 @@ public class Person {
 		String[] occupationsList = this.occupations.split(";");
 		for (int j = 0; j < occupationsList.length; j++) {
 
-			int occupationID = manager.exists("occupation", "name",
-					occupationsList[j]);
+			int occupationID = manager.exists("occupationID", "occupation", "name",
+					StringEscape.escapeSql(occupationsList[j]));
 			if (occupationID > 0) {
 				// id exists in db, then add FK for "worksAs"
 
 				manager.addWorksAs(this.getId(), occupationID);
 			} else {
 				// add occupation to the DB
-				manager.addOccupation(occupationsList[j]);
-				if (manager.exists("occupation", "name", occupationsList[j]) > 0) {
+				manager.addOccupation(StringEscape.escapeSql(occupationsList[j]));
+				if (manager.exists("occupationID","occupation", "name", StringEscape.escapeSql(occupationsList[j])) > 0) {
 					manager.addWorksAs(this.getId(), manager.exists(
-							"occupation", "name", occupationsList[j]));
+							"occupationID","occupation", "name", StringEscape.escapeSql(occupationsList[j])));
 				}
 			}
 		}
