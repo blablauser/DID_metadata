@@ -1,5 +1,7 @@
 package didproject;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.*;
 
 import com.hp.hpl.jena.query.Query;
@@ -10,7 +12,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 
 public class SparqlQueryProcesser {
-	public static void getMetadata(String queryString) {
+	public static void getMetadata(String queryString, Person castaway) {
 
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(
@@ -25,6 +27,11 @@ public class SparqlQueryProcesser {
 			System.out.println("NULL DOCUMENT ERROR.");
 		else {
 			NodeList resultList = xmlFile.getElementsByTagName("result");
+			if (resultList.getLength() == 0) {
+				System.out.println("No such resourse on DBpedia.");
+				//TODO Do something with these results - so that you'll know further on!!!
+			}
+			
 			for (int i = 0; i < resultList.getLength(); i++) {
 				// Get element
 				Element element = (Element) resultList.item(i);
@@ -42,7 +49,7 @@ public class SparqlQueryProcesser {
 							child = child.getNextSibling();
 						
 						String value = child.getNodeValue();
-						System.out.println(value);
+						System.out.println("NAME:"+value+";");
 						
 					} else if (attribute.equals("birth")) {
 						NodeList childList = binding.getElementsByTagName("literal").item(0).getChildNodes();
@@ -81,7 +88,7 @@ public class SparqlQueryProcesser {
 		qexec.close();
 	}
 	
-	public static void getCategories(String queryString) {
+	public static void getCategories(String queryString, Person castaway) {
 
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(
@@ -91,11 +98,17 @@ public class SparqlQueryProcesser {
 
 		String xmlStr = ResultSetFormatter.asXMLString(results);
 		Document xmlFile = StringToXML.parse(xmlStr);
+		ArrayList<String> categoriesList = new ArrayList<String>();
 
 		if (xmlFile == null)
 			System.out.println("NULL DOCUMENT ERROR.");
 		else {
 			NodeList resultList = xmlFile.getElementsByTagName("result");
+			if (resultList.getLength() == 0) {
+				System.out.println("ERROR getting subjectOf.");
+				//TODO Do something with these results - so that you'll know further on!!!
+			}
+			
 			for (int i = 0; i < resultList.getLength(); i++) {
 				// Get element
 				Element element = (Element) resultList.item(i);
@@ -113,26 +126,23 @@ public class SparqlQueryProcesser {
 							child = child.getNextSibling();
 						
 						String value = child.getNodeValue();
-						System.out.println(value);
+						// strip the heading of the results
+						value = value.replaceAll("http://dbpedia.org/resource/Category:","");
+						categoriesList.add(value);
+						
+						// get date of birth, if any:
+						if (value.endsWith("_births")) {
+							System.out.println("Year is:"+value.substring(0,4));
+							castaway.setDateOfBirth(value.substring(0,4));
+						}
 					}
-
 				}
 			}
+			// add the array to the Person:
+			castaway.setCategories(categoriesList);		
 
 		}
 
 		qexec.close();
 	}
-	// public static boolean checkAttribute(Element binding, String attribute,
-	// String value, String tag){
-	// if (attribute.equals(value)) {
-	// Node literal = binding.getElementsByTagName(tag).item(0);
-	// String output = literal.getNodeValue();
-	// System.out.println(output);
-	// return true;
-	// }
-	// return false;
-	// }
-
-	// public void
 }

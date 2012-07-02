@@ -9,6 +9,44 @@ class DBManager {
 
 	private String host, port, user, password, dbname;
 	int n;
+
+	public ArrayList<String> getIds(String tblName, String tblID) {
+		ArrayList<String> result = new ArrayList<String>();
+		ResultSet rs;
+		try {
+			DBaccess.connect(host, port, user, password, dbname);
+			rs = DBaccess.retrieve("SELECT `"+tblID+"` FROM `" + tblName + "`");
+			while (rs.next()) {
+				result.add(rs.getString(tblID));
+			}
+		} catch (Exception e) {
+		} finally {
+			DBaccess.disconnect();
+			return result;
+		}
+
+	}
+
+	public boolean exists(String tblName, String field, String value) {
+		ArrayList<String> result = new ArrayList<String>();
+		int id = 0;
+		Boolean is = false;
+		ResultSet rs;
+		try {
+			DBaccess.connect(host, port, user, password, dbname);
+			rs = DBaccess.retrieve("SELECT `"+tblName+"ID` FROM `" + tblName
+					+ "` WHERE "+field+"='" + value + "'");
+			if (!rs.first()) {
+				System.err.println("TS_ERROR: No results.");
+				is = false;
+			} else
+				is = true;
+		} catch (Exception e) {
+		} finally {
+			DBaccess.disconnect();
+			return is;
+		}
+	}
     
 	public void addLanguage(String languageName) {
 		DBaccess.connect(host, port, user, password, dbname);
@@ -25,47 +63,7 @@ class DBManager {
 		System.err.println("UPDATE: " + q);
 		DBaccess.disconnect();
 	}
-
-
-	@SuppressWarnings("finally")
-	public ArrayList<String> getIds(String tblName) {
-		ArrayList<String> result = new ArrayList<String>();
-		ResultSet rs;
-		try {
-			DBaccess.connect(host, port, user, password, dbname);
-			rs = DBaccess.retrieve("SELECT `ID` FROM `" + tblName + "`");
-			while (rs.next()) {
-				result.add(rs.getString("ID"));
-			}
-		} catch (Exception e) {
-		} finally {
-			DBaccess.disconnect();
-			return result;
-		}
-
-	}
-
-	public boolean existsLang(String name) {
-		ArrayList<String> result = new ArrayList<String>();
-		String tblName = "Lang";
-		Boolean is = false;
-		ResultSet rs;
-		try {
-			DBaccess.connect(host, port, user, password, dbname);
-			rs = DBaccess.retrieve("SELECT `ID` FROM `" + tblName
-					+ "` WHERE name='" + name + "'");
-			if (!rs.first()) {
-				System.err.println("TS_ERROR: No results.");
-				is = false;
-			} else
-				is = true;
-		} catch (Exception e) {
-		} finally {
-			DBaccess.disconnect();
-			return is;
-		}
-	}
-
+	
 	public void createTable(String tblName) {
 		int textWidth1 = 50;
 		String[] fields = new String[3];
@@ -91,14 +89,14 @@ class DBManager {
 	}
 
 
-	public ArrayList<String> getLanguage(String id) {
+	public ArrayList<String> getRowById(String tblName,String field,String id) {
 		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs;
-		String tblName = "Lang";
+		
 		try {
 			DBaccess.connect(host, port, user, password, dbname);
 			rs = DBaccess.retrieve("SELECT * FROM `" + tblName
-					+ "` WHERE `ID` = '" + id + "'");
+					+ "` WHERE `"+field+"` = '" + id + "'");
 
 			if (!rs.first()) {
 				System.err.println("TS_ERROR: No results.");
@@ -110,8 +108,6 @@ class DBManager {
 		} catch (Exception e) {
 			System.err
 					.println("ERROR: Get Languages e.getm: " + e.getMessage());
-			System.err.println("SELECT * FROM `" + tblName + "` WHERE `ID` = '"
-					+ id + "'");
 		} finally {
 			DBaccess.disconnect();
 			return result;

@@ -4,9 +4,14 @@ package didproject;
 public class MainClass {
 	public static void main (String args[]){
 		  // YAAAAAY!!!
-		// read all resources from DB
 		
-		String resource = "http://dbpedia.org/resource/Debbie_Harry";
+		//TODO read resources from database!
+		
+		// maybe add ID as well ? .. 
+		
+		Person castaway = new Person("name","http://en.wikipedia.org/wiki/Debbie_Harry");
+		
+	    String resource = castaway.createDBpediaLink(castaway.getLink());
 	    
 		String sparqlQueryForName= 
 	    	    "PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
@@ -49,24 +54,17 @@ public class MainClass {
     		"     ?person dcterms:subject ?subject" +
     		"}";
 	    
-//	    String emptyQuery= "<?xml version=\"1.0\"?>" +
-//	    		"<sparql xmlns=\"http://www.w3.org/2005/sparql-results#\">" +
-//	    		"<head>" +
-//	    		"<variable name=\"name\">" +
-//	    		"<variable name=\"birth\"/>" +
-//	    		"<variable name=\"description\"/>" +
-//	    		"<variable name=\"person\"/></head><results></results></sparql>";
-//	    
-		SparqlQueryProcesser.getMetadata(sparqlQueryForName);
-	    SparqlQueryProcesser.getCategories(sparqlQueryForCategories);
+		SparqlQueryProcesser.getMetadata(sparqlQueryForName, castaway);
+	    SparqlQueryProcesser.getCategories(sparqlQueryForCategories, castaway);
 
-	    	     
-//	    	     if (xmlStr.equals(emptyQuery)) System.out.println("!!! No results");
-//	    	      else System.out.println("Has results"); 
-	    	      
+	    System.out.println(castaway.getDateOfBirth()+" occupations: "+castaway.getCategories().get(4));
 	    
-	    	     //System.out.println(xmlStr.trim());
-	    	     //System.out.println(emptyQuery);
+	    //TODO adjust the DB accordingly: add the categories to the DB (if they were not there already) 
+	    //and assign the person to the right categories "classifiedIn" table!!!
+	    
+	    //TODO: also, adjust the occupations so that they get separated by ";" and get put in the 
+	    //db accordingly, as the categories above.
+
 	}
 }
 
