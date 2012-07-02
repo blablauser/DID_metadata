@@ -41,7 +41,7 @@ public class DBaccess {
 
             conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbname
                     + "?user=" + user + "&password=" + passw + "");
-            System.err.println("TS_Gone past connection setting");
+            //System.err.println("TS_Gone past connection setting");
         } catch (Exception e) {
             System.err.println("TS_Gone nuuuuuuullllll"+e.getMessage());
             conn = null;
@@ -51,7 +51,7 @@ public class DBaccess {
     public static ResultSet retrieve(String q) {
         try {
             state = conn.createStatement();
-             System.err.println("retrive: "+q);
+             //System.err.println("retrive: "+q);
             return (state.executeQuery(q));
         } catch (SQLException ex) {
             System.err.println(q);
