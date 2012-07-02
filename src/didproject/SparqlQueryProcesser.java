@@ -21,6 +21,7 @@ public class SparqlQueryProcesser {
 		ResultSet results = qexec.execSelect();
 
 		String xmlStr = ResultSetFormatter.asXMLString(results);
+		// System.out.println(xmlStr);
 		Document xmlFile = StringToXML.parse(xmlStr);
 
 		if (xmlFile == null)
@@ -32,43 +33,46 @@ public class SparqlQueryProcesser {
 				// TODO Do something with these results - so that you'll know
 				// further on!!!
 				castaway.setOnDBpedia(false);
-				System.out.println("Try the link:"+castaway.getDBlink());
-			}
+				System.out.println("Try the link:" + castaway.getDBlink());
+			} else {
 
-			for (int i = 0; i < resultList.getLength(); i++) {
-				// Get element
-				Element element = (Element) resultList.item(i);
-				NodeList bindingsList = element.getElementsByTagName("binding");
+				//for (int i = 0; i < resultList.getLength(); i++) {
+					// Get element
+					Element element = (Element) resultList.item(0);
+					NodeList bindingsList = element
+							.getElementsByTagName("binding");
 
-				for (int j = 0; j < bindingsList.getLength(); j++) {
-					Element binding = (Element) bindingsList.item(j);
-					String attribute = binding.getAttribute("name");
+					for (int j = 0; j < bindingsList.getLength(); j++) {
+						Element binding = (Element) bindingsList.item(j);
+						String attribute = binding.getAttribute("name");
 
-					if (attribute.equals("name")) {
-						NodeList childList = binding
-								.getElementsByTagName("literal").item(0)
-								.getChildNodes();
-						Node child = childList.item(0);
+						if (attribute.equals("name")) {
+							NodeList childList = binding
+									.getElementsByTagName("literal").item(0)
+									.getChildNodes();
+							Node child = childList.item(0);
 
-						while (child.getNodeType() != Node.TEXT_NODE)
-							child = child.getNextSibling();
+							while (child.getNodeType() != Node.TEXT_NODE)
+								child = child.getNextSibling();
 
-						String value = child.getNodeValue();
-						System.out.println( value);
+							String value = child.getNodeValue();
+							castaway.setName(value);
+							System.out.println(value);
 
-					} else if (attribute.equals("person")) {
-						NodeList childList = binding
-								.getElementsByTagName("uri").item(0)
-								.getChildNodes();
-						Node child = childList.item(0);
+						} else if (attribute.equals("person")) {
+							NodeList childList = binding
+									.getElementsByTagName("uri").item(0)
+									.getChildNodes();
+							Node child = childList.item(0);
 
-						while (child.getNodeType() != Node.TEXT_NODE)
-							child = child.getNextSibling();
+							while (child.getNodeType() != Node.TEXT_NODE)
+								child = child.getNextSibling();
 
-						String value = child.getNodeValue();
-						//System.out.println(value);
+							String value = child.getNodeValue();
+							// System.out.println(value);
+						}
 					}
-				}
+				//}
 			}
 		}
 
@@ -84,6 +88,7 @@ public class SparqlQueryProcesser {
 		ResultSet results = qexec.execSelect();
 
 		String xmlStr = ResultSetFormatter.asXMLString(results);
+		// System.out.println(xmlStr);
 		Document xmlFile = StringToXML.parse(xmlStr);
 		ArrayList<String> categoriesList = new ArrayList<String>();
 

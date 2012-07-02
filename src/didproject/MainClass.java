@@ -37,18 +37,19 @@ public class MainClass {
 			castaway.setDBlink(resource);
 
 			String sparqlQueryForName = queryPrefix
-					+ "SELECT ?name ?person WHERE {" + "<" + resource
+					+ "SELECT DISTINCT ?name ?person WHERE {" + "<" + resource
 					+ "> foaf:name ?name . " + "     ?person foaf:name ?name ."
 					+ "}" + "ORDER BY ?name";
-
-			String sparqlQueryForCategories = queryPrefix
-					+ "SELECT ?subject WHERE {" + "<" + resource
-					+ "> foaf:name ?name . " + "     ?person foaf:name ?name ."
-					+ "     ?person dcterms:subject ?subject" + "}";
 
 			SparqlQueryProcesser.getMetadata(sparqlQueryForName, castaway);
 
 			if (castaway.isOnDBpedia()) {
+				
+				String sparqlQueryForCategories = queryPrefix
+						+ "SELECT DISTINCT ?subject WHERE {" + "<" + resource
+						+ "> foaf:name ?name . " + "     ?person foaf:name ?name."
+						+ "     ?person dcterms:subject ?subject" + "}";
+				//System.out.println(sparqlQueryForCategories);
 				// if the resource exists then look for metadata in categories
 				SparqlQueryProcesser.getCategories(sparqlQueryForCategories,
 						castaway);
@@ -64,16 +65,17 @@ public class MainClass {
 					if (categoryID > 0) {
 
 						// id exists in db, then add FK for "classifiedIn"
+						
 						manager.addClassifiedIn(castaway.getId(), categoryID);
 					} else {
 						// add category in the DB
 						manager.addCategory(StringEscape.escapeSql(castaway.getCategories().get(j)));
-						if (manager.exists("categoryID", "category", "name",
-								StringEscape.escapeSql(castaway.getCategories().get(j))) > 0) {
-							manager.addClassifiedIn(castaway.getId(), manager
-									.exists("categoryID", "category", "name",
-											StringEscape.escapeSql(castaway.getCategories().get(j))));
-						}
+						int var = manager.exists("categoryID", "category", "name",
+								StringEscape.escapeSql(castaway.getCategories().get(j)));
+						if (var > 0) {
+						
+							manager.addClassifiedIn(castaway.getId(), var);
+						} else System.out.println("Something, somwhere, went terribly WRONG! ");
 					}
 				}
 

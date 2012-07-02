@@ -20,6 +20,7 @@ public class Person {
 		this.setName(name);
 		this.setLink(link);
 		this.setGender(gender);
+		this.setDateOfBirth("0");
 		this.setOccupations(occupations);
 		this.setOnDBpedia(true);
 	}
@@ -95,15 +96,16 @@ public class Person {
 					StringEscape.escapeSql(occupationsList[j]));
 			if (occupationID > 0) {
 				// id exists in db, then add FK for "worksAs"
-
+                
 				manager.addWorksAs(this.getId(), occupationID);
 			} else {
 				// add occupation to the DB
 				manager.addOccupation(StringEscape.escapeSql(occupationsList[j]));
-				if (manager.exists("occupationID","occupation", "name", StringEscape.escapeSql(occupationsList[j])) > 0) {
-					manager.addWorksAs(this.getId(), manager.exists(
-							"occupationID","occupation", "name", StringEscape.escapeSql(occupationsList[j])));
-				}
+				int var = manager.exists("occupationID","occupation", "name", StringEscape.escapeSql(occupationsList[j]));
+				if (var > 0) {
+					
+					manager.addWorksAs(this.getId(), var);
+				} else System.out.println("Something, somwhere, went terribly WRONG! ");
 			}
 		}
 	}
