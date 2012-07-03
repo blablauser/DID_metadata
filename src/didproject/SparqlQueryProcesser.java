@@ -35,45 +35,44 @@ public class SparqlQueryProcesser {
 				castaway.setOnDBpedia(false);
 				System.out.println("Try the link:" + castaway.getDBlink());
 			} else {
+				castaway.setOnDBpedia(true);
+				// for (int i = 0; i < resultList.getLength(); i++) {
+				// Get element
+				Element element = (Element) resultList.item(0);
+				NodeList bindingsList = element.getElementsByTagName("binding");
 
-				//for (int i = 0; i < resultList.getLength(); i++) {
-					// Get element
-					Element element = (Element) resultList.item(0);
-					NodeList bindingsList = element
-							.getElementsByTagName("binding");
+				for (int j = 0; j < bindingsList.getLength(); j++) {
+					Element binding = (Element) bindingsList.item(j);
+					String attribute = binding.getAttribute("name");
 
-					for (int j = 0; j < bindingsList.getLength(); j++) {
-						Element binding = (Element) bindingsList.item(j);
-						String attribute = binding.getAttribute("name");
+					if (attribute.equals("name")) {
+						NodeList childList = binding
+								.getElementsByTagName("literal").item(0)
+								.getChildNodes();
+						Node child = childList.item(0);
 
-						if (attribute.equals("name")) {
-							NodeList childList = binding
-									.getElementsByTagName("literal").item(0)
-									.getChildNodes();
-							Node child = childList.item(0);
+						while (child.getNodeType() != Node.TEXT_NODE)
+							child = child.getNextSibling();
 
-							while (child.getNodeType() != Node.TEXT_NODE)
-								child = child.getNextSibling();
+						String name = child.getNodeValue();
+						castaway.setName(name);
+						// System.out.println(value);
 
-							String name = child.getNodeValue();
-							castaway.setName(name);
-							//System.out.println(value);
+					} else if (attribute.equals("page")) {
+						NodeList childList = binding
+								.getElementsByTagName("uri").item(0)
+								.getChildNodes();
+						Node child = childList.item(0);
 
-						} else if (attribute.equals("page")) {
-							NodeList childList = binding
-									.getElementsByTagName("uri").item(0)
-									.getChildNodes();
-							Node child = childList.item(0);
+						while (child.getNodeType() != Node.TEXT_NODE)
+							child = child.getNextSibling();
 
-							while (child.getNodeType() != Node.TEXT_NODE)
-								child = child.getNextSibling();
-
-							String key = child.getNodeValue();
-							castaway.setKey(key);
-							// System.out.println(personUri);
-						}
+						String key = child.getNodeValue();
+						castaway.setKey(key);
+						// System.out.println(personUri);
 					}
-				//}
+				}
+				// }
 			}
 		}
 
@@ -102,45 +101,53 @@ public class SparqlQueryProcesser {
 				// TODO Do something with these results - so that you'll know
 				// further on!!!
 				castaway.setOnDBpedia(false);
-			}
+			} else {
+				castaway.setOnDBpedia(true);
 
-			for (int i = 0; i < resultList.getLength(); i++) {
-				// Get element
-				Element element = (Element) resultList.item(i);
-				NodeList bindingsList = element.getElementsByTagName("binding");
+				for (int i = 0; i < resultList.getLength(); i++) {
+					// Get element
+					Element element = (Element) resultList.item(i);
+					NodeList bindingsList = element
+							.getElementsByTagName("binding");
 
-				for (int j = 0; j < bindingsList.getLength(); j++) {
-					Element binding = (Element) bindingsList.item(j);
-					String attribute = binding.getAttribute("name");
+					for (int j = 0; j < bindingsList.getLength(); j++) {
+						Element binding = (Element) bindingsList.item(j);
+						String attribute = binding.getAttribute("name");
 
-					if (attribute.equals("subject")) {
-						NodeList childList = binding
-								.getElementsByTagName("uri").item(0)
-								.getChildNodes();
-						Node child = childList.item(0);
+						if (attribute.equals("subject")) {
+							NodeList childList = binding
+									.getElementsByTagName("uri").item(0)
+									.getChildNodes();
+							Node child = childList.item(0);
 
-						while (child.getNodeType() != Node.TEXT_NODE)
-							child = child.getNextSibling();
+							while (child.getNodeType() != Node.TEXT_NODE)
+								child = child.getNextSibling();
 
-						String value = child.getNodeValue();
-						// strip the heading of the results
-						value = value.replaceAll(
-								"http://dbpedia.org/resource/Category:", "");
-						categoriesList.add(value);
+							String value = child.getNodeValue();
+							// strip the heading of the results
+							value = value
+									.replaceAll(
+											"http://dbpedia.org/resource/Category:",
+											"");
+							categoriesList.add(value);
 
-						// get date of birth, if any:
-						if (!value.endsWith("s_births")) {
-							if (value.endsWith("_births")) {
-								System.out.println(castaway.getId()+":"+castaway.getDBlink());
-								System.out.println(value+" -> dob:"
-										+ value.substring(0, 4));
-								castaway.setDateOfBirth(value.substring(0, 4));
+							// get date of birth, if any:
+							if (!value.endsWith("s_births")) {
+								if (value.endsWith("_births")) {
+									System.out.println(castaway.getId() + ":"
+											+ castaway.getDBlink());
+									System.out.println(value + " -> dob:"
+											+ value.substring(0, 4));
+									castaway.setDateOfBirth(value.substring(0,
+											4));
+								}
 							}
+
 						}
-						
 					}
 				}
 			}
+
 			// add the array to the Person:
 			castaway.setCategories(categoriesList);
 

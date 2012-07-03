@@ -11,7 +11,7 @@ public class StringEscape {
   		return str;
      }
      public static String escapeUrl(String str) {
-     	str = str.replaceAll(" ", "%20");
+     	
   		str = str.replaceAll("\"", "%22");
   		str = str.replaceAll("\'", "%27");
   		str = str.replaceAll("\\(", "%28");
