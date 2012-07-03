@@ -55,11 +55,11 @@ public class SparqlQueryProcesser {
 							while (child.getNodeType() != Node.TEXT_NODE)
 								child = child.getNextSibling();
 
-							String value = child.getNodeValue();
-							castaway.setName(value);
-							System.out.println(value);
+							String name = child.getNodeValue();
+							castaway.setName(name);
+							//System.out.println(value);
 
-						} else if (attribute.equals("person")) {
+						} else if (attribute.equals("page")) {
 							NodeList childList = binding
 									.getElementsByTagName("uri").item(0)
 									.getChildNodes();
@@ -68,8 +68,9 @@ public class SparqlQueryProcesser {
 							while (child.getNodeType() != Node.TEXT_NODE)
 								child = child.getNextSibling();
 
-							String value = child.getNodeValue();
-							// System.out.println(value);
+							String key = child.getNodeValue();
+							castaway.setKey(key);
+							// System.out.println(personUri);
 						}
 					}
 				//}
@@ -128,11 +129,15 @@ public class SparqlQueryProcesser {
 						categoriesList.add(value);
 
 						// get date of birth, if any:
-						if (value.endsWith("_births")) {
-							System.out.println("Year is:"
-									+ value.substring(0, 4));
-							castaway.setDateOfBirth(value.substring(0, 4));
+						if (!value.endsWith("s_births")) {
+							if (value.endsWith("_births")) {
+								System.out.println(castaway.getId()+":"+castaway.getDBlink());
+								System.out.println(value+" -> dob:"
+										+ value.substring(0, 4));
+								castaway.setDateOfBirth(value.substring(0, 4));
+							}
 						}
+						
 					}
 				}
 			}

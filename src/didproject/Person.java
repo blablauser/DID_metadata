@@ -10,6 +10,7 @@ public class Person {
 	private String gender;
 	private String occupations;
 	private String dateOfBirth;
+	private String key;
 	private boolean onDBpedia;
 
 	private ArrayList<String> categories;
@@ -21,6 +22,7 @@ public class Person {
 		this.setLink(link);
 		this.setGender(gender);
 		this.setDateOfBirth("0");
+		this.setKey("");
 		this.setOccupations(occupations);
 		this.setOnDBpedia(true);
 	}
@@ -139,5 +141,13 @@ public class Person {
 
 	public String getDBlink() {
 		return DBlink;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String description) {
+		this.key = description;
 	}
 }

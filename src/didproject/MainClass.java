@@ -37,17 +37,19 @@ public class MainClass {
 			castaway.setDBlink(resource);
 
 			String sparqlQueryForName = queryPrefix
-					+ "SELECT DISTINCT ?name ?person WHERE {" + "<" + resource
-					+ "> foaf:name ?name . " + "     ?person foaf:name ?name ."
+					+ "SELECT DISTINCT ?name ?person ?page WHERE {" + "<" + resource
+					+ "> foaf:page ?page . " + "     ?person foaf:page ?page ."
+					+ "?person foaf:name ?name ."
 					+ "}" + "ORDER BY ?name";
-
+            
+			
 			SparqlQueryProcesser.getMetadata(sparqlQueryForName, castaway);
 
 			if (castaway.isOnDBpedia()) {
 				
 				String sparqlQueryForCategories = queryPrefix
 						+ "SELECT DISTINCT ?subject WHERE {" + "<" + resource
-						+ "> foaf:name ?name . " + "     ?person foaf:name ?name."
+						+ "> foaf:page ?page  . " + "  ?person foaf:page ?page ."
 						+ "     ?person dcterms:subject ?subject" + "}";
 				//System.out.println(sparqlQueryForCategories);
 				// if the resource exists then look for metadata in categories
