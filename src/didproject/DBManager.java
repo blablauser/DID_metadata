@@ -50,6 +50,35 @@ class DBManager {
 			return id;
 		}
 	}
+	public String returnStringField(String returnField, String tblName, String field, String value) {
+		String id="";
+
+		ResultSet rs;
+		try {
+			DBaccess.connect(host, port, user, password, dbname);
+			rs = DBaccess.retrieve("SELECT `" + returnField + "` FROM `"
+					+ tblName + "` WHERE " + field + "='" + value + "'");
+			if (!rs.first()) {
+				//System.err.println("<exists> ERROR: No results.");
+				id = "";
+			} else {
+				id = rs.getString(returnField);
+			}
+		} catch (Exception e) {
+			System.err.println("Error parsing ID from <exists>");
+		} finally {
+			DBaccess.disconnect();
+			return id;
+		}
+	}
+	
+	public void addAgeToCastaways(){
+//		String q = "UPDATE castaway SET "+field+" = " + value + " WHERE castawayID = '" + id + "'";
+//		DBaccess.connect(host, port, user, password, dbname);
+//		DBaccess.update(q);
+//		System.err.println("UPDATE: " + q);
+//		DBaccess.disconnect();
+	}
 
 	public void addClassifiedIn(int castawayID, int categoryID) {
 		DBaccess.connect(host, port, user, password, dbname);
@@ -144,6 +173,37 @@ class DBManager {
 		}
 
 	}
+	
+	public ArrayList<String> getEpisode(String tblName, String id) {
+		ArrayList<String> result = new ArrayList<String>();
+		ResultSet rs;
+
+		try {
+			DBaccess.connect(host, port, user, password, dbname);
+			rs = DBaccess.retrieve("SELECT * FROM `" + tblName + "` WHERE `"
+					+ tblName + "ID` = '" + id + "'");
+
+			if (!rs.first()) {
+				System.err.println("TS_ERROR: Episode does not exist.");
+				return null;
+			}
+
+			result.add(rs.getString("episodeID"));
+			result.add(rs.getString("castawayID"));
+			result.add(rs.getString("luxuryID"));
+			result.add(rs.getString("dateOfBroadcast"));
+			result.add(rs.getString("age"));
+			result.add(rs.getString("occupations"));
+
+		} catch (Exception e) {
+			System.err.println("ERROR: Get Episode e.getm: " + e.getMessage());
+		} finally {
+			DBaccess.disconnect();
+			return result;
+		}
+
+	}
+	
 ////
 ////	public int size(String tblName) {
 //		try {
