@@ -72,12 +72,12 @@ class DBManager {
 		}
 	}
 	
-	public void addAgeToCastaways(){
-//		String q = "UPDATE castaway SET "+field+" = " + value + " WHERE castawayID = '" + id + "'";
-//		DBaccess.connect(host, port, user, password, dbname);
-//		DBaccess.update(q);
-//		System.err.println("UPDATE: " + q);
-//		DBaccess.disconnect();
+	public void updateEpisode(int castawayID, String field, String value){
+		String q = "UPDATE episode SET "+field+" = " + value + " WHERE castawayID = '" + castawayID + "'";
+		DBaccess.connect(host, port, user, password, dbname);
+		DBaccess.update(q);
+		System.err.println("update Age per episode: " + q);
+		DBaccess.disconnect();
 	}
 
 	public void addClassifiedIn(int castawayID, int categoryID) {

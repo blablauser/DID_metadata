@@ -9,11 +9,13 @@ public class MainClass {
 		 
 		CollectMetadataAboutGuests.run();
 		 
-		*/
+		* */
 		
 		/** TODO 
 		 * calculate and add to DB the age of each castaway!
-		 * 
+		 
+		 AddAgeOfCastaway.run();
+		 
 		 * */
 		
 //		

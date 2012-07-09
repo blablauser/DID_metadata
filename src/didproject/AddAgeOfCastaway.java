@@ -12,6 +12,7 @@ public class AddAgeOfCastaway {
 		// get all persons in DB - to query for them
 		episodeIDs = manager.getIds("episode", "episodeID");
 		Episode episode;
+
 		for (int i = 0; i < episodeIDs.size(); i++) {
 			// get date of broadcast and castawayID
 			ArrayList<String> fields = new ArrayList<String>();
@@ -20,10 +21,27 @@ public class AddAgeOfCastaway {
 					Integer.parseInt(fields.get(1)), Integer.parseInt(fields
 							.get(2)), fields.get(3), Integer.parseInt(fields
 							.get(4)), fields.get(5));
-			
-			int dob = manager.exists("dateOfBirth", "castaway",
-					"castawayID", Integer.toString(episode.getCastawayID()));
-			//int age = //
+
+			int dob = manager.exists("dateOfBirth", "castaway", "castawayID",
+					Integer.toString(episode.getCastawayID()));
+
+			String dateOfBroadcast = episode.getDateOfBroadcast();
+			int yearOfBroadcast = Integer.parseInt(dateOfBroadcast
+					.substring(dateOfBroadcast.length() - 4));
+
+			int age;
+			if (dob == 0)
+				age = 0;
+			else
+				age = yearOfBroadcast - dob;
+
+			System.out.println("epID:" + episode.getEpisodeID()
+					+ ", date of birth:" + dob);
+			System.out.println("Year of Broadcast:" + yearOfBroadcast);
+			System.out.println("Age:" + age);
+
+			manager.updateEpisode(episode.getCastawayID(), "age",
+					Integer.toString(age));
 		}
 	}
 }
