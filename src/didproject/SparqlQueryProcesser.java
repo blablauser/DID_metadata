@@ -155,4 +155,30 @@ public class SparqlQueryProcesser {
 
 		qexec.close();
 	}
+
+	public static void getMetaAboutSong(String queryStringDB,
+			String queryStringMB) {
+
+		//Query queryDBpedia = QueryFactory.create(queryStringDB);
+		Query queryMusicBrainz = QueryFactory.create(queryStringMB);
+
+		//QueryExecution qexecDBpedia = QueryExecutionFactory.sparqlService(
+		//		"http://dbpedia.org/sparql", queryDBpedia);
+		QueryExecution qexecMusicBrainz = QueryExecutionFactory.sparqlService(
+				"http://dbtune.org/musicbrainz/sparql", queryMusicBrainz);
+
+		//ResultSet resultsDBpedia = qexecDBpedia.execSelect();
+		ResultSet resultsMusicBrainz = qexecMusicBrainz.execSelect();
+
+		//String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
+		String xmlStrMusicBrainz = ResultSetFormatter
+				.asXMLString(resultsMusicBrainz);
+
+		//System.out.println(xmlStrDBpedia);
+		System.out.println("-----------------");
+		System.out.println(xmlStrMusicBrainz);
+
+		//Document xmlFile = StringToXML.parse(xmlStrDBpedia);
+
+	}
 }
