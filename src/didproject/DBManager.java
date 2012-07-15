@@ -117,33 +117,8 @@ class DBManager {
 		String q = "UPDATE castaway SET "+field+" = " + value + " WHERE castawayID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
-		//System.err.println("UPDATE: " + q);
 		DBaccess.disconnect();
 	}
-//
-//	public void createTable(String tblName) {
-//		int textWidth1 = 50;
-//		String[] fields = new String[3];
-//		fields[0] = "ID";
-//		fields[1] = "name";
-//		fields[2] = "active";
-//		String q = "CREATE TABLE \"" + tblName + "\"" + "(" + fields[0]
-//				+ " int(11) NOT NULL AUTO_INCREMENT, " + fields[1]
-//				+ " VARCHAR(" + textWidth1 + ") NOT NULL, " + fields[2]
-//				+ " int(1) NOT NULL, " + "PRIMARY KEY (\"" + fields[0] + "\")"
-//				+ ")";
-//		try {
-//			DBaccess.connect(host, port, user, password, dbname);
-//			DBaccess.create("SET sql_mode='ANSI_QUOTES'");
-//			// Create table proper
-//			DBaccess.createTable(q);
-//			System.err.println(tblName + " table created");
-//		} catch (Exception e) {
-//		} finally {
-//			DBaccess.disconnect();
-//			return;
-//		}
-//	}
 
 	public ArrayList<String> getCastaway(String tblName, String id) {
 		ArrayList<String> result = new ArrayList<String>();
@@ -197,6 +172,40 @@ class DBManager {
 
 		} catch (Exception e) {
 			System.err.println("ERROR: Get Episode e.getm: " + e.getMessage());
+		} finally {
+			DBaccess.disconnect();
+			return result;
+		}
+
+	}
+	public ArrayList<String> getRecord(String tblName, String id) {
+		ArrayList<String> result = new ArrayList<String>();
+		ResultSet rs;
+
+		try {
+			DBaccess.connect(host, port, user, password, dbname);
+			rs = DBaccess.retrieve("SELECT * FROM `" + tblName + "` WHERE `"
+					+ tblName + "ID` = '" + id + "'");
+
+			if (!rs.first()) {
+				System.err.println("TS_ERROR: Episode does not exist.");
+				return null;
+			}
+
+			result.add(rs.getString("recordID"));
+			result.add(rs.getString("artist"));
+			result.add(rs.getString("title"));
+			result.add(rs.getString("part_of"));
+			result.add(rs.getString("composer"));
+			result.add(rs.getString("releasedOn"));
+			result.add(rs.getString("artistURI"));
+			result.add(rs.getString("songURI"));
+			result.add(rs.getString("artistComment"));
+			result.add(rs.getString("genderRatio"));
+			result.add(rs.getString("bound"));
+
+		} catch (Exception e) {
+			System.err.println("ERROR: Get Record e.getm: " + e.getMessage());
 		} finally {
 			DBaccess.disconnect();
 			return result;

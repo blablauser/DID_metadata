@@ -1,0 +1,10 @@
+!SESSION 2012-07-15 19:11:38.512 -----------------------------------------------
+eclipse.buildId=I20110613-1736
+java.version=1.6.0_27
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.modeling.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.modeling.product
+
+!ENTRY org.eclipse.ui 4 4 2012-07-15 19:13:33.457
+!MESSAGE Invalid preference page path: XML Syntax
