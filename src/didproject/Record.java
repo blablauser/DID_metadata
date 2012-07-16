@@ -202,53 +202,53 @@ public class Record {
 	}
 
 	public static String getLinkedResourcesQuery(Record record) {
-		String query = "SELECT DISTINCT *" + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * WHERE {" + "{ "
 				+ "?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, "
+				+ "FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ "FILTER (LANG(?songTitle) = 'en') ."
 
 				+ "?song dbpedia-owl:musicalArtist ?artist ."
 
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, "
+				+ "FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "} "
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?songTitle) = 'en') ."
 
 				+ " ?song dbpedia-owl:musicalArtist ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, "
+				+ " FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?artistName) = 'en') ."
 
 				+ "} UNION"
 				+ " {?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?songTitle) = 'en') ."
 
 				+ " ?song dbpedia-owl:musicalArtist ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, "
+				+ " FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?artistName) = 'en') ."
 				+ "}"
 				// ##
@@ -256,51 +256,51 @@ public class Record {
 				// ##
 				+ "UNION { ?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, "
+				+ "FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ "FILTER (LANG(?songTitle) = 'en') ."
 
 				+ "?song dbpedia-owl:musicalBand ?artist ."
 
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, "
+				+ "FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "} "
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?songTitle) = 'en') ."
 
 				+ " ?song dbpedia-owl:musicalBand ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, "
+				+ " FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?artistName) = 'en') ."
 				+ " } "
 
 				+ "UNION {"
 				+ " ?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?songTitle) = 'en') ."
 
 				+ " ?song dbpedia-owl:musicalBand ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, "
+				+ " FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?artistName) = 'en') ."
 				+ "}"
 				+ "" + "} LIMIT 1";
@@ -310,37 +310,37 @@ public class Record {
 
 	public static String getIndividualSongQuery(Record record) {
 		// bound = 2, if found
-		String query = "SELECT DISTINCT *" + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
 				+ "?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, "
+				+ "FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ "FILTER (LANG(?songTitle) = 'en') ."
 				+ "} "
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
+				+ "\", \"i\") ) ."
+				+ " FILTER (LANG(?songTitle) = 'en') .}"
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/Work> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?songTitle) = 'en') ."
 
 				+ "} UNION"
 				+ " {?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, "
+				+ " FILTER ( regex(?songTitle, \""
 				+ record.getPart_of()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?songTitle) = 'en') ."
 				+ "} "
 				+ "}LIMIT 1";
@@ -353,32 +353,32 @@ public class Record {
 
 	public static String getIndividualArtistQuery(Record record) {
 		// bound = 3, if found
-		String query = "SELECT DISTINCT *"
+		String query = "SELECT DISTINCT * "
 				+ "WHERE {"
 				+ "{ "
 
 				+ "?artist rdf:type <http://dbpedia.org/ontology/Artist> ."
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, "
+				+ "FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "} "
 
 				+ "UNION {"
 				+ " ?artist rdf:type schema:MusicGroup ."
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, "
+				+ " FILTER ( regex(?artistName, \""
 				+ record.getArtist()
-				+ ", \"i\") ) ."
+				+ "\", \"i\") ) ."
 				+ " FILTER (LANG(?artistName) = 'en') ."
 				+ " } "
 
 				+ "UNION {"
 				+ " ?artist rdf:type <http://umbel.org/umbel/rc/MusicalPerformer> ."
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, " + record.getArtist()
-				+ ", \"i\") ) ." + " FILTER (LANG(?artistName) = 'en') ." + "}"
+				+ " FILTER ( regex(?artistName, \"" + record.getArtist()
+				+ "\", \"i\") ) ." + " FILTER (LANG(?artistName) = 'en') ." + "}"
 				+ "} LIMIT 1";
 
 		return query;
@@ -386,38 +386,38 @@ public class Record {
 
 	public static String getIndividualClassicalSongQuery(Record record) {
 		// bound = 5, if found
-		String query = "SELECT DISTINCT *" + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
 				+ "?song rdf:type [rdfs:subClassOf ?genre] ."
 				+ "?genre rdfs:subClassOf yago:ClassicalMusic107025900 ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, " + record.getPart_of()
-				+ ", \"i\") ) ." + "FILTER (LANG(?songTitle) = 'en') ." + "} "
+				+ "FILTER ( regex(?songTitle, \"" + record.getPart_of()
+				+ "\", \"i\") ) ." + "FILTER (LANG(?songTitle) = 'en') ." + "} "
 				+ "} " + "}LIMIT 1";
 		return query;
 	}
 
 	public static String getIndividualClassicalArtistQuery(Record record) {
 
-		String query = "SELECT DISTINCT *"
+		String query = "SELECT DISTINCT * "
 				+ "WHERE {"
 				+ "{ "
 				+ "?artist dcterms:subject [skos:broader category:Classical_music_era] ."
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, " + record.getPart_of()
-				+ ", \"i\") ) ." + "FILTER (LANG(?artistName) = 'en') ." + "} "
+				+ "FILTER ( regex(?artistName, \"" + record.getPart_of()
+				+ "\", \"i\") ) ." + "FILTER (LANG(?artistName) = 'en') ." + "} "
 				+ "} " + "}LIMIT 1";
 		return query;
 	}
 
 	public static String getReleaseDateQuery(Record record) {
-		String query = "SELECT DISTINCT *" + "WHERE " + "{ " + "<"
+		String query = "SELECT DISTINCT * " + "WHERE " + "{ " + "<"
 				+ record.getSongURI() + ">"
 				+ " dbpedia-owl:releaseDate ?releaseDate} ";
 		return query;
 	}
 
 	public static String getSongGenreQuery(Record record) {
-		String query = "SELECT DISTINCT *"
+		String query = "SELECT DISTINCT * "
 				+ "WHERE {"
 				+ "OPTIONAL {"
 				+ "<"
@@ -432,7 +432,7 @@ public class Record {
 	}
 
 	public static String getArtistCommentQuery(Record record) {
-		String query = "SELECT DISTINCT *" + "WHERE " + "{ " + "OPTIONAL {"
+		String query = "SELECT DISTINCT * " + "WHERE " + "{ " + "OPTIONAL {"
 				+ "<" + record.getArtistURI()
 				+ "> rdfs:comment ?artistComment ."
 				+ "FILTER (LANG(?artistComment) = 'en') }" + "} ";

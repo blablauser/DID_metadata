@@ -165,7 +165,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -230,7 +230,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -282,7 +282,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -341,7 +341,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -411,7 +411,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -470,7 +470,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -520,7 +520,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+	//	System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -574,7 +574,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -625,7 +625,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+		//System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)
@@ -686,7 +686,7 @@ public class SparqlQueryProcesser {
 		ResultSet resultsDBpedia = qexec.execSelect();
 
 		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
-		System.out.println(xmlStrDBpedia);
+	//	System.out.println(xmlStrDBpedia);
 		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
 
 		if (xmlFile == null)

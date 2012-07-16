@@ -38,7 +38,9 @@ public class CollectMetadataAboutSongsDBpedia {
 					fields.get(6), fields.get(7), fields.get(8),
 					Double.parseDouble(fields.get(9)), Integer.parseInt(fields
 							.get(13)));
-
+			
+           // System.out.println(Record.getLinkedResourcesQuery(record));
+			
 			SparqlQueryProcesser.getBoundArtistSongURIs(
 					queryPrefix + Record.getLinkedResourcesQuery(record),
 					record);
@@ -46,24 +48,30 @@ public class CollectMetadataAboutSongsDBpedia {
 			// if there was no bound resource, then:
 
 			if (record.getBound() == 0) {
-
+				System.out.println(Record.getIndividualSongQuery(record));
+				
 				SparqlQueryProcesser.getIndividualSong(
 						queryPrefix + Record.getIndividualSongQuery(record),
 						record);
 				// so here, bound can only be 0 or 2!!!
-
+				System.out.println(Record.getIndividualArtistQuery(record));
+				
 				SparqlQueryProcesser.getIndividualArtist(
 						queryPrefix + Record.getIndividualArtistQuery(record),
 						record);
 			}
 			// if bound is still 0, then get the Classical pieces! bound = 5
 			if (record.getBound() == 0) {
-
+                
+				System.out.println(Record.getIndividualClassicalSongQuery(record));
+				
 				SparqlQueryProcesser.getIndividualClassicalSong(queryPrefix
 						+ Record.getIndividualClassicalSongQuery(record),
 						record);
 				// so here, bound can only be 0 or 5!!!
-
+                
+				System.out.println(Record.getIndividualClassicalArtistQuery(record));
+				
 				SparqlQueryProcesser.getIndividualClassicalArtist(queryPrefix
 						+ Record.getIndividualClassicalArtistQuery(record),
 						record);
@@ -74,12 +82,14 @@ public class CollectMetadataAboutSongsDBpedia {
 			switch (record.getBound()) {
 			case 1: {
 				// bound resources
-
+				
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
+				
 				SparqlQueryProcesser.getGenre(
 						queryPrefix + Record.getSongGenreQuery(record), record);
+				
 				SparqlQueryProcesser.getArtistComment(
 						queryPrefix + Record.getArtistCommentQuery(record),
 						record);
