@@ -240,6 +240,9 @@ class DBManager {
 			result.add(rs.getString("songURI"));
 			result.add(rs.getString("artistComment"));
 			result.add(rs.getString("genderRatio"));
+			result.add(rs.getString("gender"));
+			result.add(rs.getString("categories_record"));
+			result.add(rs.getString("categories_artist"));
 			result.add(rs.getString("bound"));
 
 		} catch (Exception e) {
