@@ -556,7 +556,6 @@ public class SparqlQueryProcesser {
 							String genre = child.getNodeValue();
 							genre = genre.replaceAll(
 									"http://dbpedia.org/resource/", "");
-
 							genreList.add(genre);
 						}
 					}
@@ -613,6 +612,133 @@ public class SparqlQueryProcesser {
 						}
 					}
 				}
+			}
+		}
+		qexec.close();
+	}
+
+	public static void getCategoriesForSong(String queryStringDB, Record record) {
+
+		Query query = QueryFactory.create(queryStringDB);
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(
+				"http://dbpedia.org/sparql", query);
+		ResultSet resultsDBpedia = qexec.execSelect();
+
+		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
+		System.out.println(xmlStrDBpedia);
+		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
+
+		if (xmlFile == null)
+			System.out.println("NULL DOCUMENT ERROR.");
+		else {
+			NodeList resultList = xmlFile.getElementsByTagName("result");
+			if (resultList.getLength() == 0) {
+				System.out.println("NO getCategoriesForSong.");
+				// TODO Do something with these results - so that you'll know
+				// further on!!!
+			} else {
+
+				ArrayList<String> categories_record = new ArrayList<String>();
+
+				for (int i = 0; i < resultList.getLength(); i++) {
+					// Get element
+					Element element = (Element) resultList.item(i);
+					NodeList bindingsList = element
+							.getElementsByTagName("binding");
+
+					for (int j = 0; j < bindingsList.getLength(); j++) {
+						Element binding = (Element) bindingsList.item(j);
+						String attribute = binding.getAttribute("name");
+
+						if (attribute.equals("subject")) {
+							NodeList childList = binding
+									.getElementsByTagName("uri").item(0)
+									.getChildNodes();
+							Node child = childList.item(0);
+
+							while (child.getNodeType() != Node.TEXT_NODE)
+								child = child.getNextSibling();
+
+							String value = child.getNodeValue();
+							// strip the heading of the results
+							value = value
+									.replaceAll(
+											"http://dbpedia.org/resource/Category:",
+											"");
+							categories_record.add(value);
+
+							// get date of birth, if any:
+						}
+					}
+				}
+				record.setCategories_record(categories_record);
+			}
+		}
+		qexec.close();
+	}
+
+	public static void getCategoriesForArtist(String queryStringDB,
+			Record record) {
+
+		Query query = QueryFactory.create(queryStringDB);
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(
+				"http://dbpedia.org/sparql", query);
+		ResultSet resultsDBpedia = qexec.execSelect();
+
+		String xmlStrDBpedia = ResultSetFormatter.asXMLString(resultsDBpedia);
+		System.out.println(xmlStrDBpedia);
+		Document xmlFile = StringToXML.parse(xmlStrDBpedia);
+
+		if (xmlFile == null)
+			System.out.println("NULL DOCUMENT ERROR.");
+		else {
+			NodeList resultList = xmlFile.getElementsByTagName("result");
+			if (resultList.getLength() == 0) {
+				System.out.println("NO getCategoriesForArtist.");
+				// TODO Do something with these results - so that you'll know
+				// further on!!!
+			} else {
+
+				ArrayList<String> categories_artist = new ArrayList<String>();
+
+				for (int i = 0; i < resultList.getLength(); i++) {
+					// Get element
+					Element element = (Element) resultList.item(i);
+					NodeList bindingsList = element
+							.getElementsByTagName("binding");
+
+					for (int j = 0; j < bindingsList.getLength(); j++) {
+						Element binding = (Element) bindingsList.item(j);
+						String attribute = binding.getAttribute("name");
+
+						if (attribute.equals("subject")) {
+							NodeList childList = binding
+									.getElementsByTagName("uri").item(0)
+									.getChildNodes();
+							Node child = childList.item(0);
+
+							while (child.getNodeType() != Node.TEXT_NODE)
+								child = child.getNextSibling();
+
+							String value = child.getNodeValue();
+							// strip the heading of the results
+							value = value
+									.replaceAll(
+											"http://dbpedia.org/resource/Category:",
+											"");
+							categories_artist.add(value);
+
+							// get date of birth, if any:
+						}
+					}
+				}
+				if (record.getGenreList().size() == 0) {
+
+					ArrayList<String> genre = new ArrayList<String>();
+					genre.add("ClassicalMusic");
+					record.setGenreList(genre);
+				}
+				record.setCategories_artist(categories_artist);
 			}
 		}
 		qexec.close();

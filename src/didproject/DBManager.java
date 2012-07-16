@@ -29,7 +29,8 @@ class DBManager {
 
 	}
 
-	public int exists(String returnField, String tblName, String field, String value) {
+	public int exists(String returnField, String tblName, String field,
+			String value) {
 		int id = -1;
 
 		ResultSet rs;
@@ -38,7 +39,7 @@ class DBManager {
 			rs = DBaccess.retrieve("SELECT `" + returnField + "` FROM `"
 					+ tblName + "` WHERE " + field + "='" + value + "'");
 			if (!rs.first()) {
-				//System.err.println("<exists> ERROR: No results.");
+				// System.err.println("<exists> ERROR: No results.");
 				id = -1;
 			} else {
 				id = Integer.parseInt(rs.getString(returnField));
@@ -50,8 +51,10 @@ class DBManager {
 			return id;
 		}
 	}
-	public String returnStringField(String returnField, String tblName, String field, String value) {
-		String id="";
+
+	public String returnStringField(String returnField, String tblName,
+			String field, String value) {
+		String id = "";
 
 		ResultSet rs;
 		try {
@@ -59,7 +62,7 @@ class DBManager {
 			rs = DBaccess.retrieve("SELECT `" + returnField + "` FROM `"
 					+ tblName + "` WHERE " + field + "='" + value + "'");
 			if (!rs.first()) {
-				//System.err.println("<exists> ERROR: No results.");
+				// System.err.println("<exists> ERROR: No results.");
 				id = "";
 			} else {
 				id = rs.getString(returnField);
@@ -71,9 +74,10 @@ class DBManager {
 			return id;
 		}
 	}
-	
-	public void updateEpisode(int castawayID, String field, String value){
-		String q = "UPDATE episode SET "+field+" = " + value + " WHERE castawayID = '" + castawayID + "'";
+
+	public void updateEpisode(int castawayID, String field, String value) {
+		String q = "UPDATE episode SET " + field + " = " + value
+				+ " WHERE castawayID = '" + castawayID + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
 		System.err.println("update Age per episode: " + q);
@@ -82,39 +86,72 @@ class DBManager {
 
 	public void addClassifiedIn(int castawayID, int categoryID) {
 		DBaccess.connect(host, port, user, password, dbname);
-		DBaccess.update("INSERT INTO classifiedIn (castawayID,categoryID) VALUES ("+castawayID+","+categoryID+")");
+		DBaccess.update("INSERT INTO classifiedIn (castawayID,categoryID) VALUES ("
+				+ castawayID + "," + categoryID + ")");
 		DBaccess.disconnect();
 	}
 	
+	public void addGenreOf(int genreID, int recordID) {
+		DBaccess.connect(host, port, user, password, dbname);
+		DBaccess.update("INSERT INTO recordOf (genreID,recordID) VALUES ("
+				+ genreID + "," + recordID + ")");
+		DBaccess.disconnect();
+	}
+
 	public void addWorksAs(int castawayID, int occupationID) {
 		DBaccess.connect(host, port, user, password, dbname);
-		DBaccess.update("INSERT INTO worksAs (castawayID,occupationID) VALUES ("+castawayID+","+occupationID+")");
+		DBaccess.update("INSERT INTO worksAs (castawayID,occupationID) VALUES ("
+				+ castawayID + "," + occupationID + ")");
 		DBaccess.disconnect();
 	}
-	
+
 	public void addCategory(String name) {
 		DBaccess.connect(host, port, user, password, dbname);
-		DBaccess.update("INSERT INTO category (name) VALUES ('"+name+"')");
+		DBaccess.update("INSERT INTO category (name) VALUES ('" + name + "')");
+		DBaccess.disconnect();
+	}
+
+	public void addGenre(String name) {
+		DBaccess.connect(host, port, user, password, dbname);
+		DBaccess.update("INSERT INTO genre (name) VALUES ('" + name + "')");
 		DBaccess.disconnect();
 	}
 	
 	public void addOccupation(String name) {
 		DBaccess.connect(host, port, user, password, dbname);
-		DBaccess.update("INSERT INTO occupation (name) VALUES ('"+name+"')");
+		DBaccess.update("INSERT INTO occupation (name) VALUES ('" + name + "')");
 		DBaccess.disconnect();
 	}
-	
-	
+
 	public void flagCastaway(int id, String field, int value) {
-		String q = "UPDATE castaway SET "+field+" = " + value + " WHERE castawayID = '" + id + "'";
+		String q = "UPDATE castaway SET " + field + " = " + value
+				+ " WHERE castawayID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
 		System.err.println("UPDATE: " + q);
 		DBaccess.disconnect();
 	}
+
 	
+	public void updateRecord(int id, String releasedOn, String artistURI,
+			String songURI, String artistComment, String gender,
+			double genderRatio, String categories_record,
+			String categories_artist, int bound) {
+		String q = "UPDATE record SET releasedOn = " + releasedOn
+				+ ", artistURI=" + artistURI + ", songURI=" + songURI
+				+ ", artistComment=" + artistComment + ", gender=" + gender
+				+ ",genderRatio=" + genderRatio + ", categories_record="
+				+ categories_record + ", categories_artist="
+				+ categories_artist + ", bound = "+bound+" WHERE recordID = '" + id + "'";
+		DBaccess.connect(host, port, user, password, dbname);
+		DBaccess.update(q);
+		System.err.println("UPDATE record "+id+":" + q);
+		DBaccess.disconnect();
+	}
+
 	public void addDoBCastaway(int id, String field, int value) {
-		String q = "UPDATE castaway SET "+field+" = " + value + " WHERE castawayID = '" + id + "'";
+		String q = "UPDATE castaway SET " + field + " = " + value
+				+ " WHERE castawayID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
 		DBaccess.disconnect();
@@ -148,7 +185,7 @@ class DBManager {
 		}
 
 	}
-	
+
 	public ArrayList<String> getEpisode(String tblName, String id) {
 		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs;
@@ -178,6 +215,7 @@ class DBManager {
 		}
 
 	}
+
 	public ArrayList<String> getRecord(String tblName, String id) {
 		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rs;
@@ -212,26 +250,28 @@ class DBManager {
 		}
 
 	}
-	
-////
-////	public int size(String tblName) {
-//		try {
-//			DBaccess.connect(host, port, user, password, dbname);
-//			ResultSet rs = DBaccess.retrieve("SELECT COUNT(*) FROM `" + tblName
-//					+ "`");
-//			rs.first();
-//			n = Integer.parseInt(rs.getString("COUNT(*)"));
-//			System.err.println("TS____ N= " + n);
-//		} catch (SQLException ex) {
-//			System.err.println("TS_SQL_ERR_INS = " + ex.getMessage());
-//			System.err.println("SELECT COUNT(*) FROM \"" + tblName + "\"");
-//		} catch (NumberFormatException ex) {
-//			System.err.println("TS_SQL_NUMFORMAT_INS = " + ex.getMessage());
-//		} finally {
-//			DBaccess.disconnect();
-//			return n;
-//		}
-//
-//	}
+
+
+
+	// //
+	// // public int size(String tblName) {
+	// try {
+	// DBaccess.connect(host, port, user, password, dbname);
+	// ResultSet rs = DBaccess.retrieve("SELECT COUNT(*) FROM `" + tblName
+	// + "`");
+	// rs.first();
+	// n = Integer.parseInt(rs.getString("COUNT(*)"));
+	// System.err.println("TS____ N= " + n);
+	// } catch (SQLException ex) {
+	// System.err.println("TS_SQL_ERR_INS = " + ex.getMessage());
+	// System.err.println("SELECT COUNT(*) FROM \"" + tblName + "\"");
+	// } catch (NumberFormatException ex) {
+	// System.err.println("TS_SQL_NUMFORMAT_INS = " + ex.getMessage());
+	// } finally {
+	// DBaccess.disconnect();
+	// return n;
+	// }
+	//
+	// }
 
 }

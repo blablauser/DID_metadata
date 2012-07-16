@@ -36,43 +36,37 @@ public class CollectMetadataAboutSongsDBpedia {
 			record = new Record(Integer.parseInt(fields.get(0)), fields.get(1),
 					fields.get(2), fields.get(3), fields.get(4), fields.get(5),
 					fields.get(6), fields.get(7), fields.get(8),
-					Integer.parseInt(fields.get(9)), Integer.parseInt(fields
-							.get(10)));
+					Double.parseDouble(fields.get(9)), Integer.parseInt(fields
+							.get(13)));
 
-			String getLinkedResourcesQuery = Record
-					.getLinkedResourcesQuery(record);
-
-			SparqlQueryProcesser.getBoundArtistSongURIs(queryPrefix
-					+ getLinkedResourcesQuery, record);
+			SparqlQueryProcesser.getBoundArtistSongURIs(
+					queryPrefix + Record.getLinkedResourcesQuery(record),
+					record);
 
 			// if there was no bound resource, then:
 
 			if (record.getBound() == 0) {
 
-				String getIndividualSongQuery = Record
-						.getIndividualSongQuery(record);
-				SparqlQueryProcesser.getIndividualSong(queryPrefix
-						+ getIndividualSongQuery, record);
+				SparqlQueryProcesser.getIndividualSong(
+						queryPrefix + Record.getIndividualSongQuery(record),
+						record);
 				// so here, bound can only be 0 or 2!!!
 
-				String getIndividualArtistQuery = Record
-						.getIndividualArtistQuery(record);
-				SparqlQueryProcesser.getIndividualArtist(queryPrefix
-						+ getIndividualArtistQuery, record);
+				SparqlQueryProcesser.getIndividualArtist(
+						queryPrefix + Record.getIndividualArtistQuery(record),
+						record);
 			}
 			// if bound is still 0, then get the Classical pieces! bound = 5
 			if (record.getBound() == 0) {
 
-				String getIndividualClassicalSongQuery = Record
-						.getIndividualClassicalSongQuery(record);
 				SparqlQueryProcesser.getIndividualClassicalSong(queryPrefix
-						+ getIndividualClassicalSongQuery, record);
+						+ Record.getIndividualClassicalSongQuery(record),
+						record);
 				// so here, bound can only be 0 or 5!!!
 
-				String getIndividualClassicalArtistQuery = Record
-						.getIndividualClassicalArtistQuery(record);
 				SparqlQueryProcesser.getIndividualClassicalArtist(queryPrefix
-						+ getIndividualClassicalArtistQuery, record);
+						+ Record.getIndividualClassicalArtistQuery(record),
+						record);
 			}
 
 			// query for metadata!!!
@@ -121,25 +115,39 @@ public class CollectMetadataAboutSongsDBpedia {
 			}
 			case 5: {
 				// classical song
-              // TODO get SubjectOf, to make DataMining
+				// get SubjectOf, to make DataMining
+				SparqlQueryProcesser.getCategoriesForSong(
+						queryPrefix + Record.getSubjectOfSongQuery(record),
+						record);
 			}
 			case 6: {
 				// classical artist
-				// TODO get SubjectOf, to make DataMining
+				// get SubjectOf, to make DataMining
+				SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
+						+ Record.getSubjectOfArtistQuery(record), record);
+
 			}
 
 			case 7: {
 				// classical both, not bound..
-				// TODO get SubjectOf, to make DataMining
+				// get SubjectOf, to make DataMining
+				SparqlQueryProcesser.getCategoriesForSong(
+						queryPrefix + Record.getSubjectOfSongQuery(record),
+						record);
+				SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
+						+ Record.getSubjectOfArtistQuery(record), record);
 			}
 
 			}
-			
-			if (record.getBound()!=0) {
-				// TODO something changed in the Record, thus, UPDATE THE DATABASE
-			}
 
+			if (record.getBound() != 0) {
+				// TODO RESOURCE IDENTIFIED SOMEHOW: something changed in the
+				// Record, thus, UPDATE THE DATABASE
+				record.updateRecordInfo(manager);
+				record.addGenre(manager);
+				// put the genres in the DB as well!
+
+			}
 		}
-
 	}
 }

@@ -1,5 +1,7 @@
 package didproject;
 
+//import java.util.ArrayList;
+
 public class MainClass {
 	public static void main(String args[]) {
 
@@ -21,12 +23,19 @@ public class MainClass {
 		/**
 		 * TODO RECORDS: Get metadata from DBpedia. 
 		 * 
-		 * 
-		 * 
 		 * */
-		CollectMetadataAboutSongsDBpedia.run();
-		//
-		// DBManager manager = new DBManager();
-		//
+		
+		 CollectMetadataAboutSongsDBpedia.run();
+		
+		
+		
+//		ArrayList<String> categories = new ArrayList<String>();
+//		categories.add("String1");
+//		
+//		System.out.println(categories.toString());
+//		String[] occupationsList = categories.toString().split(",");
+//		for (int i=0;i<occupationsList.length; i++) {
+//			System.out.println(occupationsList[i]);
+//		}
 	}
 }
