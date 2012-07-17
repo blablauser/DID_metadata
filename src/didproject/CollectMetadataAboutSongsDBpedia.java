@@ -37,10 +37,10 @@ public class CollectMetadataAboutSongsDBpedia {
 					fields.get(2), fields.get(3), fields.get(4), fields.get(5),
 					fields.get(6), fields.get(7), fields.get(8),
 					Double.parseDouble(fields.get(9)), Integer.parseInt(fields
-							.get(13)));
-			
-           // System.out.println(Record.getLinkedResourcesQuery(record));
-			
+							.get(13)), Integer.parseInt(fields.get(14)));
+
+			System.out.println("Start: Record nr " + record.getRecordID());
+
 			SparqlQueryProcesser.getBoundArtistSongURIs(
 					queryPrefix + Record.getLinkedResourcesQuery(record),
 					record);
@@ -48,72 +48,85 @@ public class CollectMetadataAboutSongsDBpedia {
 			// if there was no bound resource, then:
 
 			if (record.getBound() == 0) {
-				System.out.println(Record.getIndividualSongQuery(record));
-				
+				// System.out.println(Record.getIndividualSongQuery(record));
+
 				SparqlQueryProcesser.getIndividualSong(
 						queryPrefix + Record.getIndividualSongQuery(record),
 						record);
 				// so here, bound can only be 0 or 2!!!
-				System.out.println(Record.getIndividualArtistQuery(record));
-				
+				// System.out.println(Record.getIndividualArtistQuery(record));
+
 				SparqlQueryProcesser.getIndividualArtist(
 						queryPrefix + Record.getIndividualArtistQuery(record),
 						record);
 			}
 			// if bound is still 0, then get the Classical pieces! bound = 5
 			if (record.getBound() == 0) {
-                
-				System.out.println(Record.getIndividualClassicalSongQuery(record));
-				
+				//
+				// System.out.println(Record
+				// .getIndividualClassicalSongQuery(record));
+
 				SparqlQueryProcesser.getIndividualClassicalSong(queryPrefix
 						+ Record.getIndividualClassicalSongQuery(record),
 						record);
 				// so here, bound can only be 0 or 5!!!
-                
-				System.out.println(Record.getIndividualClassicalArtistQuery(record));
-				
+
+				// System.out.println(Record
+				// .getIndividualClassicalArtistQuery(record));
+
 				SparqlQueryProcesser.getIndividualClassicalArtist(queryPrefix
 						+ Record.getIndividualClassicalArtistQuery(record),
 						record);
+			}
+			if (record.getBound() == 0) {
+				SparqlQueryProcesser
+						.getIndividualModernClassicalArtist(
+								queryPrefix
+										+ Record.getIndividualModernClassicalArtistQuery(record),
+								record);
 			}
 
 			// query for metadata!!!
 
 			switch (record.getBound()) {
-			case 1: {
+			case 1:
 				// bound resources
-				
+				System.out.println("Case 1 bound resources");
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
-				
+
 				SparqlQueryProcesser.getGenre(
 						queryPrefix + Record.getSongGenreQuery(record), record);
-				
+
 				SparqlQueryProcesser.getArtistComment(
 						queryPrefix + Record.getArtistCommentQuery(record),
 						record);
-			}
-			case 2: {
+				break;
+			case 2:
 				// individual song
-
+				System.out.println("Case 2 individual song");
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
 				SparqlQueryProcesser.getGenre(
 						queryPrefix + Record.getSongGenreQuery(record), record);
-			}
-			case 3: {
+				break;
+			case 3:
 				// individual artist
-
+				System.out.println("Case 3 individual artist");
+				SparqlQueryProcesser.getArtistGenre(
+						queryPrefix + Record.getArtistGenreQuery(record),
+						record);
 				SparqlQueryProcesser.getArtistComment(
 						queryPrefix + Record.getArtistCommentQuery(record),
 						record);
-			}
+				break;
 
-			case 4: {
+			case 4:
 				// separate song and artist, not bound
-
+				System.out
+						.println("Case 4 separate song and artist, not bound");
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
@@ -122,37 +135,42 @@ public class CollectMetadataAboutSongsDBpedia {
 				SparqlQueryProcesser.getArtistComment(
 						queryPrefix + Record.getArtistCommentQuery(record),
 						record);
-			}
-			case 5: {
+				break;
+			case 5:
 				// classical song
 				// get SubjectOf, to make DataMining
+				System.out.println("Case 5 classical song");
 				SparqlQueryProcesser.getCategoriesForSong(
 						queryPrefix + Record.getSubjectOfSongQuery(record),
 						record);
-			}
-			case 6: {
+				break;
+			case 6:
 				// classical artist
 				// get SubjectOf, to make DataMining
+				System.out.println("Case 6 classical artist");
+				
 				SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
 						+ Record.getSubjectOfArtistQuery(record), record);
+				break;
 
-			}
-
-			case 7: {
+			case 7:
 				// classical both, not bound..
 				// get SubjectOf, to make DataMining
+				System.out.println("Case 7 classical both, not bound.");
 				SparqlQueryProcesser.getCategoriesForSong(
 						queryPrefix + Record.getSubjectOfSongQuery(record),
 						record);
 				SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
 						+ Record.getSubjectOfArtistQuery(record), record);
-			}
+				break;
 
 			}
 
 			if (record.getBound() != 0) {
 				// TODO RESOURCE IDENTIFIED SOMEHOW: something changed in the
 				// Record, thus, UPDATE THE DATABASE
+				if (record.getArtistComment().length() != 0)
+					Record.calculateGender(record);
 				record.updateRecordInfo(manager);
 				record.addGenre(manager);
 				// put the genres in the DB as well!

@@ -93,7 +93,7 @@ class DBManager {
 	
 	public void addGenreOf(int genreID, int recordID) {
 		DBaccess.connect(host, port, user, password, dbname);
-		DBaccess.update("INSERT INTO recordOf (genreID,recordID) VALUES ("
+		DBaccess.update("INSERT INTO genreOf (genreID,recordID) VALUES ("
 				+ genreID + "," + recordID + ")");
 		DBaccess.disconnect();
 	}
@@ -136,13 +136,13 @@ class DBManager {
 	public void updateRecord(int id, String releasedOn, String artistURI,
 			String songURI, String artistComment, String gender,
 			double genderRatio, String categories_record,
-			String categories_artist, int bound) {
-		String q = "UPDATE record SET releasedOn = " + releasedOn
-				+ ", artistURI=" + artistURI + ", songURI=" + songURI
-				+ ", artistComment=" + artistComment + ", gender=" + gender
-				+ ",genderRatio=" + genderRatio + ", categories_record="
-				+ categories_record + ", categories_artist="
-				+ categories_artist + ", bound = "+bound+" WHERE recordID = '" + id + "'";
+			String categories_artist, int bound, int timed_out) {
+		String q = "UPDATE record SET releasedOn = '" + releasedOn
+				+ "', artistURI= '" + artistURI + "', songURI='" + songURI
+				+ "', artistComment='" + artistComment + "', gender='" + gender
+				+ "',genderRatio=" + genderRatio + ", categories_record='"
+				+ categories_record + "', categories_artist='"
+				+ categories_artist + "', bound = '"+bound+"', timed_out = '"+timed_out+"'  WHERE recordID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
 		System.err.println("UPDATE record "+id+":" + q);
@@ -244,6 +244,7 @@ class DBManager {
 			result.add(rs.getString("categories_record"));
 			result.add(rs.getString("categories_artist"));
 			result.add(rs.getString("bound"));
+			result.add(rs.getString("timed_out"));
 
 		} catch (Exception e) {
 			System.err.println("ERROR: Get Record e.getm: " + e.getMessage());

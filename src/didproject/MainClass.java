@@ -25,17 +25,7 @@ public class MainClass {
 		 * 
 		 * */
 		
-		 CollectMetadataAboutSongsDBpedia.run();
-		
-		
-		
-//		ArrayList<String> categories = new ArrayList<String>();
-//		categories.add("String1");
-//		
-//		System.out.println(categories.toString());
-//		String[] occupationsList = categories.toString().split(",");
-//		for (int i=0;i<occupationsList.length; i++) {
-//			System.out.println(occupationsList[i]);
-//		}
+		CollectMetadataAboutSongsDBpedia.run();
+
 	}
 }

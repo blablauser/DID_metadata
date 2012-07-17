@@ -18,6 +18,7 @@ public class Record {
 	private ArrayList<String> categories_record;
 	private ArrayList<String> categories_artist;
 	private int bound;
+	private int timed_out;
 
 	public int getRecordID() {
 		return recordID;
@@ -139,23 +140,34 @@ public class Record {
 		return gender;
 	}
 
+	public void setTimed_out(int timed_out) {
+		this.timed_out = timed_out;
+	}
+
+	public int getTimed_out() {
+		return timed_out;
+	}
+
 	public Record(int recordID, String artist, String title, String part_of,
 			String composer, String releasedOn, String artistURI,
-			String songURI, String artistComment, double genderRatio, int bound) {
+			String songURI, String artistComment, double genderRatio,
+			int bound, int timed_out) {
 		this.setRecordID(recordID);
 		this.setArtist(artist);
 		this.setTitle(title);
 		this.setPart_of(part_of);
 		this.setComposer(composer);
 		this.setReleasedOn(releasedOn);
-		this.setArtistURI(artistURI);
-		this.setSongURI(songURI);
+		this.setArtistURI(StringEscape.unescapeUrl(artistURI));
+		this.setSongURI(StringEscape.unescapeUrl(songURI));
 		this.setArtistComment(artistComment);
+		this.setGender("");
 		this.setGenderRatio(genderRatio);
 		this.setBound(bound);
 		this.setGenreList(new ArrayList<String>());
 		this.setCategories_artist(new ArrayList<String>());
 		this.setCategories_record(new ArrayList<String>());
+		this.setTimed_out(timed_out);
 	}
 
 	/**
@@ -165,7 +177,8 @@ public class Record {
 	public Record(int recordID, String artist, String title, String part_of,
 			String composer, String releasedOn, String artistURI,
 			String songURI, String artistComment, double genderRatio,
-			String categories_record, String categories_artist, int bound) {
+			String categories_record, String categories_artist, int bound,
+			int timed_out) {
 
 		this.setRecordID(recordID);
 		this.setArtist(artist);
@@ -173,8 +186,8 @@ public class Record {
 		this.setPart_of(part_of);
 		this.setComposer(composer);
 		this.setReleasedOn(releasedOn);
-		this.setArtistURI(artistURI);
-		this.setSongURI(songURI);
+		this.setArtistURI(StringEscape.unescapeUrl(artistURI));
+		this.setSongURI(StringEscape.unescapeUrl(songURI));
 		this.setArtistComment(artistComment);
 		this.setGenderRatio(genderRatio);
 		this.setGenreList(new ArrayList<String>());
@@ -199,151 +212,151 @@ public class Record {
 		this.setCategories_artist(varArray);
 
 		this.setBound(bound);
+		this.setTimed_out(timed_out);
 	}
 
 	public static String getLinkedResourcesQuery(Record record) {
 		String query = "SELECT DISTINCT * WHERE {" + "{ "
 				+ "?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ "FILTER (LANG(?songTitle) = 'en') ."
+				// + "FILTER (LANG(?songTitle) = 'en') ."
+				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
 				+ "?song dbpedia-owl:musicalArtist ?artist ."
 
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ "FILTER (LANG(?artistName) = 'en') ."
+				// + "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
 				+ "} "
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
+				// + " FILTER (LANG(?songTitle) = 'en') ."
+				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
 				+ " ?song dbpedia-owl:musicalArtist ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?artistName) = 'en') ."
+				// + " FILTER (LANG(?artistName) = 'en') ."
+				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
 
 				+ "} UNION"
 				+ " {?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
+				// + " FILTER (LANG(?songTitle) = 'en') ."
+				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
 				+ " ?song dbpedia-owl:musicalArtist ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?artistName) = 'en') ."
+				// + " FILTER (LANG(?artistName) = 'en') ."
+				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
 				+ "}"
 				// ##
 				// ## change the artist link to :musicalBand
 				// ##
 				+ "UNION { ?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ "FILTER (LANG(?songTitle) = 'en') ."
+				// + "FILTER (LANG(?songTitle) = 'en') ."
+				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
 				+ "?song dbpedia-owl:musicalBand ?artist ."
 
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ "FILTER (LANG(?artistName) = 'en') ."
+				// + "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
 				+ "} "
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
+				// + " FILTER (LANG(?songTitle) = 'en') ."
+				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
 				+ " ?song dbpedia-owl:musicalBand ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?artistName) = 'en') ."
+				// + " FILTER (LANG(?artistName) = 'en') ."
+				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
 				+ " } "
 
 				+ "UNION {"
 				+ " ?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
+				// + " FILTER (LANG(?songTitle) = 'en') ."
+				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
 				+ " ?song dbpedia-owl:musicalBand ?artist ."
 
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?artistName) = 'en') ."
-				+ "}"
-				+ "" + "} LIMIT 1";
+				// + " FILTER (LANG(?artistName) = 'en') ."
+				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
+				+ "}" + "} LIMIT 1";
 
 		return query;
 	}
 
 	public static String getIndividualSongQuery(Record record) {
 		// bound = 2, if found
-		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
 				+ "?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ "FILTER (LANG(?songTitle) = 'en') ."
-				+ "} "
+				// + "FILTER (LANG(?songTitle) = 'en') ."
+				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
 
-				+ "UNION {"
-				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
-				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') .}"
+				+ "} "
 
 				+ "UNION {"
 				+ "?song rdf:type <http://dbpedia.org/ontology/Work> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
+				// + " FILTER (LANG(?songTitle) = 'en') ."
+				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) .}"
 
-				+ "} UNION"
+				+ " UNION"
 				+ " {?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
-				+ " FILTER ( regex(?songTitle, \""
-				+ record.getPart_of()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?songTitle) = 'en') ."
-				+ "} "
-				+ "}LIMIT 1";
+				// + " FILTER (LANG(?songTitle) = 'en') ."
+				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
+
+				+ "} " + "}LIMIT 1";
 		// ##
 		// ## change the artist link to :musicalBand
 		// ##
@@ -359,40 +372,45 @@ public class Record {
 
 				+ "?artist rdf:type <http://dbpedia.org/ontology/Artist> ."
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ "FILTER (LANG(?artistName) = 'en') ."
+				// + "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
 				+ "} "
 
 				+ "UNION {"
 				+ " ?artist rdf:type schema:MusicGroup ."
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, \""
-				+ record.getArtist()
-				+ "\", \"i\") ) ."
-				+ " FILTER (LANG(?artistName) = 'en') ."
+				// + " FILTER (LANG(?artistName) = 'en') ."
+				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
 				+ " } "
 
 				+ "UNION {"
 				+ " ?artist rdf:type <http://umbel.org/umbel/rc/MusicalPerformer> ."
 				+ " ?artist rdfs:label ?artistName ."
-				+ " FILTER ( regex(?artistName, \"" + record.getArtist()
-				+ "\", \"i\") ) ." + " FILTER (LANG(?artistName) = 'en') ." + "}"
-				+ "} LIMIT 1";
+				// + " FILTER (LANG(?artistName) = 'en') ."
+				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ." + "}" + "} LIMIT 1";
 
 		return query;
 	}
 
 	public static String getIndividualClassicalSongQuery(Record record) {
 		// bound = 5, if found
-		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * " + "WHERE {"
+				+ "{ "
 				+ "?song rdf:type [rdfs:subClassOf ?genre] ."
 				+ "?genre rdfs:subClassOf yago:ClassicalMusic107025900 ."
 				+ "?song rdfs:label ?songTitle ."
-				+ "FILTER ( regex(?songTitle, \"" + record.getPart_of()
-				+ "\", \"i\") ) ." + "FILTER (LANG(?songTitle) = 'en') ." + "} "
-				+ "} " + "}LIMIT 1";
+				// + "FILTER (LANG(?songTitle) = 'en') ."
+				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
 	}
 
@@ -403,9 +421,26 @@ public class Record {
 				+ "{ "
 				+ "?artist dcterms:subject [skos:broader category:Classical_music_era] ."
 				+ "?artist rdfs:label ?artistName ."
-				+ "FILTER ( regex(?artistName, \"" + record.getPart_of()
-				+ "\", \"i\") ) ." + "FILTER (LANG(?artistName) = 'en') ." + "} "
-				+ "} " + "}LIMIT 1";
+//				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ." + "} " + "} LIMIT 1";
+		return query;
+	}
+
+	public static String getIndividualModernClassicalArtistQuery(Record record) {
+
+		// TODO fix for modern!!!!
+
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
+				+ "?artist dcterms:subject [skos:broader category:Classical_composers] ."
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
 	}
 
@@ -417,16 +452,21 @@ public class Record {
 	}
 
 	public static String getSongGenreQuery(Record record) {
-		String query = "SELECT DISTINCT * "
-				+ "WHERE {"
-				+ "OPTIONAL {"
-				+ "<"
-				+ record.getSongURI()
-				+ ">"
+		String query = "SELECT DISTINCT * " + "WHERE {" + "OPTIONAL {" + "<"
+				+ record.getSongURI() + ">"
 
-				+ " dbpedia-owl:genre ?genre} ."
-				+ "  OPTIONAL {<http://dbpedia.org/resource/Like_a_Prayer_%28song%29> dbpedia2:genre ?genre} . "
-				+ "}";
+				+ " dbpedia-owl:genre ?genre} ." + "  OPTIONAL {<"
+				+ record.getSongURI() + "> dbpedia2:genre ?genre} . " + "}";
+		return query;
+
+	}
+
+	public static String getArtistGenreQuery(Record record) {
+		String query = "SELECT DISTINCT * " + "WHERE {" + "OPTIONAL {" + "<"
+				+ record.getArtistURI() + ">"
+
+				+ " dbpedia-owl:genre ?genre} ." + "  OPTIONAL {<"
+				+ record.getArtistURI() + "> dbpedia2:genre ?genre} . " + "}";
 		return query;
 
 	}
@@ -468,6 +508,9 @@ public class Record {
 				.toLowerCase(), " them ");
 
 		double ratio = (she + her) / (he + his);
+		if ((he + his) == 0)
+			ratio = (she + her);
+
 		record.setGenderRatio(ratio);
 		if ((they + them) > (she + her) && (they + them) > (he + his))
 			record.setGender("other");
@@ -482,10 +525,12 @@ public class Record {
 
 	public void updateRecordInfo(DBManager manager) {
 		manager.updateRecord(this.getRecordID(), this.getReleasedOn(),
-				this.getArtistURI(), this.getSongURI(),
-				this.getArtistComment(), this.getGender(),
+				StringEscape.escapeUrl(this.getArtistURI()), StringEscape
+						.escapeUrl(this.getSongURI()), StringEscape
+						.escapeSql(this.getArtistComment()), this.getGender(),
 				this.getGenderRatio(), this.getCategories_record().toString(),
-				this.getCategories_artist().toString(), this.getBound());
+				this.getCategories_artist().toString(), this.getBound(), this
+						.getTimed_out());
 	}
 
 	public void addGenre(DBManager manager) {
@@ -493,7 +538,6 @@ public class Record {
 			int genreID = manager.exists("genreID", "genre", "name",
 					StringEscape.escapeSql(this.getGenreList().get(j)));
 			if (genreID > 0) {
-
 				// id exists in db, then add FK for "genreOf"
 
 				manager.addGenreOf(genreID, this.getRecordID());
@@ -504,7 +548,7 @@ public class Record {
 				int var = manager.exists("genreID", "genre", "name",
 						StringEscape.escapeSql(this.getGenreList().get(j)));
 				if (var > 0) {
-					manager.addGenreOf(genreID, this.getRecordID());
+					manager.addGenreOf(var, this.getRecordID());
 				} else
 					System.out
 							.println("Something, somwhere, went terribly WRONG! ");
