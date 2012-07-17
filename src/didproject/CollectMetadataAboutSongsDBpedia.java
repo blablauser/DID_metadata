@@ -30,6 +30,12 @@ public class CollectMetadataAboutSongsDBpedia {
 		recordIDs = manager.getIds("record", "recordID");
 
 		for (int i = 0; i < recordIDs.size(); i++) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// for each castawayID!!! get the rest of the fields
 			ArrayList<String> fields = new ArrayList<String>();
 			fields = manager.getRecord("record", recordIDs.get(i));
@@ -91,7 +97,7 @@ public class CollectMetadataAboutSongsDBpedia {
 			switch (record.getBound()) {
 			case 1:
 				// bound resources
-				System.out.println("Case 1 bound resources");
+				// System.out.println("Case 1 bound resources");
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
@@ -105,7 +111,7 @@ public class CollectMetadataAboutSongsDBpedia {
 				break;
 			case 2:
 				// individual song
-				System.out.println("Case 2 individual song");
+				// System.out.println("Case 2 individual song");
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
@@ -114,7 +120,7 @@ public class CollectMetadataAboutSongsDBpedia {
 				break;
 			case 3:
 				// individual artist
-				System.out.println("Case 3 individual artist");
+				// System.out.println("Case 3 individual artist");
 				SparqlQueryProcesser.getArtistGenre(
 						queryPrefix + Record.getArtistGenreQuery(record),
 						record);
@@ -125,8 +131,8 @@ public class CollectMetadataAboutSongsDBpedia {
 
 			case 4:
 				// separate song and artist, not bound
-				System.out
-						.println("Case 4 separate song and artist, not bound");
+				// System.out
+				// .println("Case 4 separate song and artist, not bound");
 				SparqlQueryProcesser.getReleaseDate(
 						queryPrefix + Record.getReleaseDateQuery(record),
 						record);
@@ -139,7 +145,7 @@ public class CollectMetadataAboutSongsDBpedia {
 			case 5:
 				// classical song
 				// get SubjectOf, to make DataMining
-				System.out.println("Case 5 classical song");
+				// System.out.println("Case 5 classical song");
 				SparqlQueryProcesser.getCategoriesForSong(
 						queryPrefix + Record.getSubjectOfSongQuery(record),
 						record);
@@ -147,8 +153,8 @@ public class CollectMetadataAboutSongsDBpedia {
 			case 6:
 				// classical artist
 				// get SubjectOf, to make DataMining
-				System.out.println("Case 6 classical artist");
-				
+				// System.out.println("Case 6 classical artist");
+
 				SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
 						+ Record.getSubjectOfArtistQuery(record), record);
 				break;
@@ -156,7 +162,7 @@ public class CollectMetadataAboutSongsDBpedia {
 			case 7:
 				// classical both, not bound..
 				// get SubjectOf, to make DataMining
-				System.out.println("Case 7 classical both, not bound.");
+				// System.out.println("Case 7 classical both, not bound.");
 				SparqlQueryProcesser.getCategoriesForSong(
 						queryPrefix + Record.getSubjectOfSongQuery(record),
 						record);

@@ -220,7 +220,7 @@ public class Record {
 				+ "?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
 				// + "FILTER (LANG(?songTitle) = 'en') ."
-				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -228,7 +228,7 @@ public class Record {
 
 				+ "?artist rdfs:label ?artistName ."
 				// + "FILTER (LANG(?artistName) = 'en') ."
-				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -238,7 +238,7 @@ public class Record {
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
-				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ " FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -246,7 +246,7 @@ public class Record {
 
 				+ " ?artist rdfs:label ?artistName ."
 				// + " FILTER (LANG(?artistName) = 'en') ."
-				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ " FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -254,7 +254,7 @@ public class Record {
 				+ " {?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
-				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ " FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -262,7 +262,7 @@ public class Record {
 
 				+ " ?artist rdfs:label ?artistName ."
 				// + " FILTER (LANG(?artistName) = 'en') ."
-				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ " FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -273,7 +273,7 @@ public class Record {
 				+ "UNION { ?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
 				// + "FILTER (LANG(?songTitle) = 'en') ."
-				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -281,7 +281,7 @@ public class Record {
 
 				+ "?artist rdfs:label ?artistName ."
 				// + "FILTER (LANG(?artistName) = 'en') ."
-				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -291,7 +291,7 @@ public class Record {
 				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
-				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ " FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -299,7 +299,7 @@ public class Record {
 
 				+ " ?artist rdfs:label ?artistName ."
 				// + " FILTER (LANG(?artistName) = 'en') ."
-				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ " FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -309,7 +309,7 @@ public class Record {
 				+ " ?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
-				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ " FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -317,7 +317,7 @@ public class Record {
 
 				+ " ?artist rdfs:label ?artistName ."
 				// + " FILTER (LANG(?artistName) = 'en') ."
-				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ " FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -334,7 +334,7 @@ public class Record {
 				+ "?song rdf:type <http://dbpedia.org/ontology/Single> ."
 				+ "?song rdfs:label ?songTitle ."
 				// + "FILTER (LANG(?songTitle) = 'en') ."
-				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -344,7 +344,7 @@ public class Record {
 				+ "?song rdf:type <http://dbpedia.org/ontology/Work> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
-				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ " FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) .}"
 
@@ -352,7 +352,7 @@ public class Record {
 				+ " {?song rdf:type <http://umbel.org/umbel/rc/MusicalComposition> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
-				+ " FILTER ( bif:contains(?songTitle, \"'"
+				+ " FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ."
 
@@ -373,7 +373,7 @@ public class Record {
 				+ "?artist rdf:type <http://dbpedia.org/ontology/Artist> ."
 				+ "?artist rdfs:label ?artistName ."
 				// + "FILTER (LANG(?artistName) = 'en') ."
-				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -383,7 +383,7 @@ public class Record {
 				+ " ?artist rdf:type schema:MusicGroup ."
 				+ " ?artist rdfs:label ?artistName ."
 				// + " FILTER (LANG(?artistName) = 'en') ."
-				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ " FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ."
 
@@ -393,7 +393,7 @@ public class Record {
 				+ " ?artist rdf:type <http://umbel.org/umbel/rc/MusicalPerformer> ."
 				+ " ?artist rdfs:label ?artistName ."
 				// + " FILTER (LANG(?artistName) = 'en') ."
-				+ " FILTER ( bif:contains(?artistName, \"'"
+				+ " FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ." + "}" + "} LIMIT 1";
 
@@ -408,7 +408,7 @@ public class Record {
 				+ "?genre rdfs:subClassOf yago:ClassicalMusic107025900 ."
 				+ "?song rdfs:label ?songTitle ."
 				// + "FILTER (LANG(?songTitle) = 'en') ."
-				+ "FILTER ( bif:contains(?songTitle, \"'"
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
@@ -422,7 +422,7 @@ public class Record {
 				+ "?artist dcterms:subject [skos:broader category:Classical_music_era] ."
 				+ "?artist rdfs:label ?artistName ."
 //				+ "FILTER (LANG(?artistName) = 'en') ."
-				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
@@ -438,7 +438,7 @@ public class Record {
 				+ "?artist dcterms:subject [skos:broader category:Classical_composers] ."
 				+ "?artist rdfs:label ?artistName ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
-				+ "FILTER ( bif:contains(?artistName, \"'"
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
 				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
@@ -474,7 +474,7 @@ public class Record {
 	public static String getArtistCommentQuery(Record record) {
 		String query = "SELECT DISTINCT * " + "WHERE " + "{ " + "OPTIONAL {"
 				+ "<" + record.getArtistURI()
-				+ "> rdfs:comment ?artistComment ."
+				+ "> dbpedia-owl:abstract ?artistComment ."
 				+ "FILTER (LANG(?artistComment) = 'en') }" + "} ";
 		return query;
 	}
