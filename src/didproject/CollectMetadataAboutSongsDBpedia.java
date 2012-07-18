@@ -44,13 +44,14 @@ public class CollectMetadataAboutSongsDBpedia {
 					fields.get(6), fields.get(7), fields.get(8),
 					Double.parseDouble(fields.get(9)), Integer.parseInt(fields
 							.get(13)), Integer.parseInt(fields.get(14)));
-
+			
+			if (record.getBound() == 0) {
 			System.out.println("Start: Record nr " + record.getRecordID());
 
 			SparqlQueryProcesser.getBoundArtistSongURIs(
 					queryPrefix + Record.getLinkedResourcesQuery(record),
 					record);
-
+			}
 			// if there was no bound resource, then:
 
 			if (record.getBound() == 0) {
