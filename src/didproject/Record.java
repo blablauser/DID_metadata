@@ -176,7 +176,7 @@ public class Record {
 	 * */
 	public Record(int recordID, String artist, String title, String part_of,
 			String composer, String releasedOn, String artistURI,
-			String songURI, String artistComment, double genderRatio,
+			String songURI, String artistComment, double genderRatio, String gender,
 			String categories_record, String categories_artist, int bound,
 			int timed_out) {
 
@@ -190,10 +190,11 @@ public class Record {
 		this.setSongURI(StringEscape.unescapeUrl(songURI));
 		this.setArtistComment(artistComment);
 		this.setGenderRatio(genderRatio);
+		this.setGender(gender);
 		this.setGenreList(new ArrayList<String>());
 
-		categories_record = categories_record.replaceAll("[", "");
-		categories_record = categories_record.replaceAll("]", "");
+		categories_record = categories_record.replaceAll("\\[", "");
+		categories_record = categories_record.replaceAll("\\]", "");
 
 		String[] var = categories_record.split(",");
 		ArrayList<String> varArray = new ArrayList<String>();
@@ -202,8 +203,8 @@ public class Record {
 		}
 		this.setCategories_record(varArray);
 
-		categories_artist = categories_artist.replaceAll("[", "");
-		categories_artist = categories_artist.replaceAll("]", "");
+		categories_artist = categories_artist.replaceAll("\\[", "");
+		categories_artist = categories_artist.replaceAll("\\]", "");
 		var = categories_artist.split(",");
 		varArray = new ArrayList<String>();
 		for (String s : var) {
@@ -423,7 +424,7 @@ public class Record {
 				+ "?artist rdfs:label ?artistName ."
 //				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
-				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
 	}
@@ -439,8 +440,25 @@ public class Record {
 				+ "?artist rdfs:label ?artistName ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
-				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ." + "} " + "} LIMIT 1";
+		return query;
+	}
+	
+	public static String getAnyArtistQuery(Record record) {
+
+		// TODO fix for modern!!!!
+
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
+				+ "?artist foaf:page ?artistPage ."
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ "} " + "} LIMIT 1";
 		return query;
 	}
 

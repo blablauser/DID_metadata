@@ -466,10 +466,7 @@ public class SparqlQueryProcesser {
 						record.setBound(6);
 					else if (record.getBound() == 5)
 						record.setBound(7);
-					else
-						System.out
-								.println("======  getIndividualClassicalArtist: Something is very very WRONG!!! ");
-
+					
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
 						Element element = (Element) resultList.item(i);
@@ -530,7 +527,7 @@ public class SparqlQueryProcesser {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
 					System.out
-							.println("ERROR getting individual getIndividualClassicalArtist.");
+							.println("ERROR getting individual getIndividualModernClassicalArtist.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -539,9 +536,7 @@ public class SparqlQueryProcesser {
 						record.setBound(6);
 					else if (record.getBound() == 5)
 						record.setBound(7);
-					else
-						System.out
-								.println("======  getIndividualClassicalArtist: Something is very very WRONG!!! ");
+					
 
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
@@ -574,6 +569,69 @@ public class SparqlQueryProcesser {
 						genre.add("Classical_other");
 						record.setGenreList(genre);
 					}
+				}
+			}
+			qexec.close();
+			record.setTimed_out(0);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			record.setTimed_out(1);
+		}
+	}
+	
+	public static void getAnyArtist(String queryStringDB,
+			Record record) {
+
+		try {
+			Query query = QueryFactory.create(queryStringDB);
+			QueryExecution qexec = QueryExecutionFactory.sparqlService(
+					"http://dbpedia.org/sparql", query);
+			ResultSet resultsDBpedia = qexec.execSelect();
+
+			String xmlStrDBpedia = ResultSetFormatter
+					.asXMLString(resultsDBpedia);
+			// System.out.println(xmlStrDBpedia);
+			Document xmlFile = StringToXML.parse(xmlStrDBpedia);
+
+			if (xmlFile == null)
+				System.out.println("NULL DOCUMENT ERROR.");
+			else {
+				NodeList resultList = xmlFile.getElementsByTagName("result");
+				if (resultList.getLength() == 0) {
+					System.out
+							.println("ERROR getting individual getAnyArtist.");
+					// TODO Do something with these results - so that you'll
+					// know
+					// further on!!!
+				} else {
+					for (int i = 0; i < resultList.getLength(); i++) {
+						// Get element
+						Element element = (Element) resultList.item(i);
+						NodeList bindingsList = element
+								.getElementsByTagName("binding");
+
+						for (int j = 0; j < bindingsList.getLength(); j++) {
+							Element binding = (Element) bindingsList.item(j);
+							String attribute = binding.getAttribute("name");
+
+							if (attribute.equals("artist")) {
+								NodeList childList = binding
+										.getElementsByTagName("uri").item(0)
+										.getChildNodes();
+								Node child = childList.item(0);
+
+								while (child.getNodeType() != Node.TEXT_NODE)
+									child = child.getNextSibling();
+
+								String artistURI = child.getNodeValue();
+								if (artistURI.contains("http://dbpedia.org/resource/")) {
+									record.setArtistURI(artistURI);
+									record.setBound(9);
+								}
+
+							}
+						}						
+					}				
 				}
 			}
 			qexec.close();

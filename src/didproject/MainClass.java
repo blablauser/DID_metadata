@@ -22,10 +22,15 @@ public class MainClass {
 		
 		/**
 		 * TODO RECORDS: Get metadata from DBpedia. 
-		 * 
+		 * CollectMetadataAboutSongsDBpedia.run();
 		 * */
 		
-		CollectMetadataAboutSongsDBpedia.run();
-
+		
+		
+		/**
+		 * TODO FIX records: Get metadata from DBpedia. 
+		 * 
+		 * */
+		CollectMetaSongsFixed.run();
 	}
 }

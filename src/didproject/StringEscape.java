@@ -60,6 +60,14 @@ public class StringEscape {
 	}
 	
 	public static String escapeBifContains(String str) {
+		str = str.trim();
+
+		if (str.startsWith("\'")) {
+			str = str.substring(1, str.length());
+		}
+		if (str.endsWith("\'")) {
+			str = str.substring(0, str.length()-1);
+		}
 		str = str.replaceAll("\'", "\' AND \'");
 		str = str.replaceAll("\".+?\"", "");
 		// if there are any other left, just delete them
