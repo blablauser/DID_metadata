@@ -464,34 +464,34 @@ public class Record {
 
 	public static String getReleaseDateQuery(Record record) {
 		String query = "SELECT DISTINCT * " + "WHERE " + "{ " + "<"
-				+ record.getSongURI() + ">"
+				+ StringEscape.escapeSparqlURL(record.getSongURI()) + ">"
 				+ " dbpedia-owl:releaseDate ?releaseDate} ";
 		return query;
 	}
 
 	public static String getSongGenreQuery(Record record) {
 		String query = "SELECT DISTINCT * " + "WHERE {" + "OPTIONAL {" + "<"
-				+ record.getSongURI() + ">"
+				+ StringEscape.escapeSparqlURL(record.getSongURI()) + ">"
 
 				+ " dbpedia-owl:genre ?genre} ." + "  OPTIONAL {<"
-				+ record.getSongURI() + "> dbpedia2:genre ?genre} . " + "}";
+				+ StringEscape.escapeSparqlURL(record.getSongURI()) + "> dbpedia2:genre ?genre} . " + "}";
 		return query;
 
 	}
 
 	public static String getArtistGenreQuery(Record record) {
 		String query = "SELECT DISTINCT * " + "WHERE {" + "OPTIONAL {" + "<"
-				+ record.getArtistURI() + ">"
+				+ StringEscape.escapeSparqlURL(record.getArtistURI()) + ">"
 
 				+ " dbpedia-owl:genre ?genre} ." + "  OPTIONAL {<"
-				+ record.getArtistURI() + "> dbpedia2:genre ?genre} . " + "}";
+				+ StringEscape.escapeSparqlURL(record.getArtistURI()) + "> dbpedia2:genre ?genre} . " + "}";
 		return query;
 
 	}
 
 	public static String getArtistCommentQuery(Record record) {
 		String query = "SELECT DISTINCT * " + "WHERE " + "{ " + "OPTIONAL {"
-				+ "<" + record.getArtistURI()
+				+ "<" + StringEscape.escapeSparqlURL(record.getArtistURI())
 				+ "> dbpedia-owl:abstract ?artistComment ."
 				+ "FILTER (LANG(?artistComment) = 'en') }" + "} ";
 		return query;
@@ -499,14 +499,14 @@ public class Record {
 
 	public static String getSubjectOfSongQuery(Record record) {
 		String query = "SELECT DISTINCT ?subject WHERE {" + " <"
-				+ record.getSongURI() + "> dcterms:subject ?subject" + "}";
+				+ StringEscape.escapeSparqlURL(record.getSongURI()) + "> dcterms:subject ?subject" + "}";
 		return query;
 
 	}
 
 	public static String getSubjectOfArtistQuery(Record record) {
 		String query = "SELECT DISTINCT ?subject WHERE {" + " <"
-				+ record.getArtistURI() + "> dcterms:subject ?subject" + "}";
+				+ StringEscape.escapeSparqlURL(record.getArtistURI()) + "> dcterms:subject ?subject" + "}";
 		return query;
 
 	}

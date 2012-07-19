@@ -645,6 +645,7 @@ public class SparqlQueryProcesser {
 
 		try {
 			Query query = QueryFactory.create(queryStringDB);
+			
 			QueryExecution qexec = QueryExecutionFactory.sparqlService(
 					"http://dbpedia.org/sparql", query);
 			ResultSet resultsDBpedia = qexec.execSelect();
@@ -660,6 +661,7 @@ public class SparqlQueryProcesser {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
 					System.out.println("NO getReleaseDate.");
+					if (record.getSongURI().length()!= 0 ) System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -780,7 +782,7 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO genre.");
+					System.out.println("NO getArtistGenre.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -842,7 +844,8 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO getReleaseDate.");
+					System.out.println("NO getArtistComment.");
+					if (record.getArtistURI().length()!= 0 ) System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -887,6 +890,7 @@ public class SparqlQueryProcesser {
 
 		try {
 			Query query = QueryFactory.create(queryStringDB);
+
 			QueryExecution qexec = QueryExecutionFactory.sparqlService(
 					"http://dbpedia.org/sparql", query);
 			ResultSet resultsDBpedia = qexec.execSelect();
@@ -902,6 +906,7 @@ public class SparqlQueryProcesser {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
 					System.out.println("NO getCategoriesForSong.");
+					if (record.getSongURI().length()!= 0 ) System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -957,6 +962,7 @@ public class SparqlQueryProcesser {
 		try {
 
 			Query query = QueryFactory.create(queryStringDB);
+
 			QueryExecution qexec = QueryExecutionFactory.sparqlService(
 					"http://dbpedia.org/sparql", query);
 			ResultSet resultsDBpedia = qexec.execSelect();
@@ -972,6 +978,7 @@ public class SparqlQueryProcesser {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
 					System.out.println("NO getCategoriesForArtist.");
+					if (record.getArtistURI().length()!= 0 ) System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!

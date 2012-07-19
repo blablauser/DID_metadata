@@ -2,7 +2,6 @@ package didproject;
 
 import java.util.ArrayList;
 
-
 public class CollectMetaSongsFixed {
 	public static void run() {
 		DBManager manager = new DBManager();
@@ -53,7 +52,8 @@ public class CollectMetaSongsFixed {
 					if (record.getReleasedOn().equals("0")) {
 						System.out.println("Try to get date for records: "
 								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -62,6 +62,15 @@ public class CollectMetaSongsFixed {
 
 						record.updateRecordInfo(manager);
 
+					}
+					if (record.getArtistComment().length() == 0) {
+						SparqlQueryProcesser.getArtistComment(queryPrefix
+								+ Record.getArtistCommentQuery(record), record);
+
+						// TODO update
+						if (record.getArtistComment().length() != 0)
+							Record.calculateGender(record);
+						record.updateRecordInfo(manager);
 					}
 				} else if (record.getBound() == 2) {
 					// System.out.println(Record.getIndividualSongQuery(record));
@@ -101,9 +110,8 @@ public class CollectMetaSongsFixed {
 					}
 
 					if (record.getReleasedOn().equals("0")) {
-						System.out.println("Try to get date for record: "
-								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -117,6 +125,16 @@ public class CollectMetaSongsFixed {
 					System.out.println("Try to fix records: "
 							+ record.getRecordID());
 
+					if (record.getArtistComment().length() == 0) {
+						SparqlQueryProcesser.getArtistComment(queryPrefix
+								+ Record.getArtistCommentQuery(record), record);
+
+						// TODO update
+						if (record.getArtistComment().length() != 0)
+							Record.calculateGender(record);
+						record.updateRecordInfo(manager);
+					}
+
 					SparqlQueryProcesser.getIndividualClassicalSong(queryPrefix
 							+ Record.getIndividualClassicalSongQuery(record),
 							record);
@@ -126,30 +144,39 @@ public class CollectMetaSongsFixed {
 
 						SparqlQueryProcesser.getReleaseDate(queryPrefix
 								+ Record.getReleaseDateQuery(record), record);
-						
+
 						// TODO
 						record.updateRecordInfo(manager);
 						record.addGenre(manager);
 					}
 
 					if (record.getReleasedOn().equals("0")) {
-						System.out.println("Categories for records: "
-								+ record.getRecordID());
 
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
 								+ Record.getSubjectOfArtistQuery(record),
 								record);
-
 						record.updateRecordInfo(manager);
 
 					}
 				} else if (record.getBound() == 4) {
+
+					if (record.getArtistComment().length() == 0) {
+						SparqlQueryProcesser.getArtistComment(queryPrefix
+								+ Record.getArtistCommentQuery(record), record);
+
+						// TODO update
+						if (record.getArtistComment().length() != 0)
+							Record.calculateGender(record);
+						record.updateRecordInfo(manager);
+					}
+
 					if (record.getReleasedOn().equals("0")) {
 						System.out.println("Categories for records: "
 								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -160,6 +187,8 @@ public class CollectMetaSongsFixed {
 
 					}
 				} else if (record.getBound() == 5) {
+					System.out.println("Categories for records: "
+							+ record.getRecordID());
 
 					SparqlQueryProcesser.getAnyArtist(
 							queryPrefix + Record.getAnyArtistQuery(record),
@@ -173,13 +202,12 @@ public class CollectMetaSongsFixed {
 						if (record.getArtistComment().length() != 0)
 							Record.calculateGender(record);
 						record.updateRecordInfo(manager);
-						
+
 					}
 
 					if (record.getReleasedOn().equals("0")) {
-						System.out.println("Categories for records: "
-								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -190,10 +218,22 @@ public class CollectMetaSongsFixed {
 
 					}
 				} else if (record.getBound() == 6) {
+
+					if (record.getArtistComment().length() == 0) {
+						SparqlQueryProcesser.getArtistComment(queryPrefix
+								+ Record.getArtistCommentQuery(record), record);
+
+						// TODO update
+						if (record.getArtistComment().length() != 0)
+							Record.calculateGender(record);
+						record.updateRecordInfo(manager);
+					}
+
 					if (record.getReleasedOn().equals("0")) {
 						System.out.println("Categories for records: "
 								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -204,10 +244,20 @@ public class CollectMetaSongsFixed {
 
 					}
 				} else if (record.getBound() == 7) {
+					if (record.getArtistComment().length() == 0) {
+						SparqlQueryProcesser.getArtistComment(queryPrefix
+								+ Record.getArtistCommentQuery(record), record);
+
+						// TODO update
+						if (record.getArtistComment().length() != 0)
+							Record.calculateGender(record);
+						record.updateRecordInfo(manager);
+					}
 					if (record.getReleasedOn().equals("0")) {
 						System.out.println("Categories for records: "
 								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -218,10 +268,21 @@ public class CollectMetaSongsFixed {
 
 					}
 				} else if (record.getBound() == 8) {
+					
+					if (record.getArtistComment().length() == 0) {
+						SparqlQueryProcesser.getArtistComment(queryPrefix
+								+ Record.getArtistCommentQuery(record), record);
+
+						// TODO update
+						if (record.getArtistComment().length() != 0)
+							Record.calculateGender(record);
+						record.updateRecordInfo(manager);
+					}
 					if (record.getReleasedOn().equals("0")) {
 						System.out.println("Categories for records: "
 								+ record.getRecordID());
-
+						SparqlQueryProcesser.getReleaseDate(queryPrefix
+								+ Record.getReleaseDateQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 								+ Record.getSubjectOfSongQuery(record), record);
 						SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -237,5 +298,4 @@ public class CollectMetaSongsFixed {
 		}
 	}
 
-	
 }
