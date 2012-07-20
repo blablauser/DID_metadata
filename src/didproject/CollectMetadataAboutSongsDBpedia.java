@@ -30,6 +30,7 @@ public class CollectMetadataAboutSongsDBpedia {
 		recordIDs = manager.getIds("record", "recordID");
 
 		for (int i = 0; i < recordIDs.size(); i++) {
+			
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -45,158 +46,129 @@ public class CollectMetadataAboutSongsDBpedia {
 					Double.parseDouble(fields.get(9)), fields.get(10),
 					fields.get(11), fields.get(12), Integer.parseInt(fields
 							.get(13)), Integer.parseInt(fields.get(14)));
+			
+			System.out.println("Record:"+record.getRecordID());
 
-			if (record.getBound() == 0 || record.getBound() == 5) {
-				System.out.println("Start again: Record nr "
-						+ record.getRecordID());
+			if (record.getBound() == 0) {
+				// try to get bound resources
 
-				if (record.getBound() == 0) {
+				SparqlQueryProcesser.getBoundArtistSongURIs(queryPrefix
+						+ Record.getLinkedResourcesQuery(record), record);
+				// b=1/0
 
-					SparqlQueryProcesser.getBoundArtistSongURIs(queryPrefix
-							+ Record.getLinkedResourcesQuery(record), record);
-				}
-				// if there was no bound resource, then:
-
-				if (record.getBound() == 0) {
-					// System.out.println(Record.getIndividualSongQuery(record));
-
+				if (record.getSongURI().equals("")) {
+					// get individual song
 					SparqlQueryProcesser
 							.getIndividualSong(
 									queryPrefix
 											+ Record.getIndividualSongQuery(record),
 									record);
-					// so here, bound can only be 0 or 2!!!
-					// System.out.println(Record.getIndividualArtistQuery(record));
+					// b=2/0
 
+					if (record.getSongURI().equals("")) {
+						// not found individual song, look for classical
+						SparqlQueryProcesser
+								.getIndividualClassicalSong(
+										queryPrefix
+												+ Record.getIndividualClassicalSongQuery(record),
+										record);
+						// b = 5/0
+						if (record.getSongURI().equals("")) {
+							// not found individual or classical song, look for
+							// ANY
+							// SONG!
+							SparqlQueryProcesser.getAnySong(queryPrefix
+									+ Record.getAnySongQuery(record), record);
+
+						}
+					}
+				}
+
+				// b=0/1/2/5/8
+				if (record.getArtistURI().equals("")) {
+					// get indiv artist
 					SparqlQueryProcesser.getIndividualArtist(queryPrefix
 							+ Record.getIndividualArtistQuery(record), record);
-				}
-				// if bound is still 0, then get the Classical pieces! bound = 5
-				if (record.getBound() == 0) {
-					//
-					// System.out.println(Record
-					// .getIndividualClassicalSongQuery(record));
+					// b=0/2/5/8/3/4/11
+					if (record.getArtistURI().equals("")) {
+						// get classical artist
+						SparqlQueryProcesser
+								.getIndividualClassicalArtist(
+										queryPrefix
+												+ Record.getIndividualClassicalArtistQuery(record),
+										record);
+						if (record.getArtistURI().equals("")) {
+							// get Modern Classical artist
+							SparqlQueryProcesser
+									.getIndividualModernClassicalArtist(
+											queryPrefix
+													+ Record.getIndividualModernClassicalArtistQuery(record),
+											record);
+							if (record.getArtistURI().equals("")) {
+								// get ANY artist
+								SparqlQueryProcesser.getAnyArtist(queryPrefix
+										+ Record.getAnyArtistQuery(record),
+										record);
 
-					SparqlQueryProcesser.getIndividualClassicalSong(queryPrefix
-							+ Record.getIndividualClassicalSongQuery(record),
-							record);
-					// so here, bound can only be 0 or 5!!!
+							}
+						}
+					}
 				}
-				// System.out.println(Record
-				// .getIndividualClassicalArtistQuery(record));
-				if (record.getBound() == 0 || record.getBound() == 5) {
-					SparqlQueryProcesser
-							.getIndividualClassicalArtist(
-									queryPrefix
-											+ Record.getIndividualClassicalArtistQuery(record),
-									record);
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
-				if (record.getBound() == 0 || record.getBound() == 5) {
-					SparqlQueryProcesser
-							.getIndividualModernClassicalArtist(
-									queryPrefix
-											+ Record.getIndividualModernClassicalArtistQuery(record),
-									record);
-				}
-
-				// query for metadata!!!
-
-				switch (record.getBound()) {
-				case 1:
-					// bound resources
-					// System.out.println("Case 1 bound resources");
+				if (record.getSongURI().length() != 0) {
+					// query for resources for songs
 					SparqlQueryProcesser.getReleaseDate(
 							queryPrefix + Record.getReleaseDateQuery(record),
 							record);
 
-					SparqlQueryProcesser.getGenre(
-							queryPrefix + Record.getSongGenreQuery(record),
-							record);
-
-					SparqlQueryProcesser.getArtistComment(
-							queryPrefix + Record.getArtistCommentQuery(record),
-							record);
-					break;
-				case 2:
-					// individual song
-					// System.out.println("Case 2 individual song");
-					SparqlQueryProcesser.getReleaseDate(
-							queryPrefix + Record.getReleaseDateQuery(record),
-							record);
-					SparqlQueryProcesser.getGenre(
-							queryPrefix + Record.getSongGenreQuery(record),
-							record);
-					break;
-				case 3:
-					// individual artist
-					// System.out.println("Case 3 individual artist");
-					SparqlQueryProcesser.getArtistGenre(
-							queryPrefix + Record.getArtistGenreQuery(record),
-							record);
-					SparqlQueryProcesser.getArtistComment(
-							queryPrefix + Record.getArtistCommentQuery(record),
-							record);
-					break;
-
-				case 4:
-					// separate song and artist, not bound
-					// System.out
-					// .println("Case 4 separate song and artist, not bound");
-					SparqlQueryProcesser.getReleaseDate(
-							queryPrefix + Record.getReleaseDateQuery(record),
-							record);
-					SparqlQueryProcesser.getGenre(
-							queryPrefix + Record.getSongGenreQuery(record),
-							record);
-					SparqlQueryProcesser.getArtistComment(
-							queryPrefix + Record.getArtistCommentQuery(record),
-							record);
-					break;
-				case 5:
-					// classical song
-					// get SubjectOf, to make DataMining
-					// System.out.println("Case 5 classical song");
 					SparqlQueryProcesser.getCategoriesForSong(queryPrefix
 							+ Record.getSubjectOfSongQuery(record), record);
-					break;
-				case 6:
-					// classical artist
-					// get SubjectOf, to make DataMining
-					// System.out.println("Case 6 classical artist");
+				}
 
+				if (record.getArtistURI().length() != 0) {
+					// query for resources for artist
 					SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
 							+ Record.getSubjectOfArtistQuery(record), record);
 					SparqlQueryProcesser.getArtistComment(
 							queryPrefix + Record.getArtistCommentQuery(record),
 							record);
-					break;
-
-				case 7:
-					// classical both, not bound..
-					// get SubjectOf, to make DataMining
-					// System.out.println("Case 7 classical both, not bound.");
-					SparqlQueryProcesser.getCategoriesForSong(queryPrefix
-							+ Record.getSubjectOfSongQuery(record), record);
-					SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
-							+ Record.getSubjectOfArtistQuery(record), record);
-					SparqlQueryProcesser.getArtistComment(
-							queryPrefix + Record.getArtistCommentQuery(record),
-							record);
-					break;
-
-				}
-
-				if (record.getBound() != 0) {
-					// TODO RESOURCE IDENTIFIED SOMEHOW: something changed in
-					// the
-					// Record, thus, UPDATE THE DATABASE
 					if (record.getArtistComment().length() != 0)
 						Record.calculateGender(record);
+				}
+
+				if (record.getGenreList().size() == 0) {
+					SparqlQueryProcesser.getGenre(
+							queryPrefix + Record.getSongGenreQuery(record),
+							record);
+					if (record.getGenreList().size() == 0) {
+						SparqlQueryProcesser.getArtistGenre(queryPrefix
+								+ Record.getArtistGenreQuery(record), record);
+					}
+				}
+				if (record.getBound() != 0) {
+					// the record changed somehow.
+
+					// mine for release date, in case it's 0
+					if (record.getReleasedOn().equals("0")) {
+						// try from song
+						Record.getReleaseDateFromSong(record);
+						
+						if (record.getReleasedOn().equals("0")) {
+							// try from artist
+							Record.getReleaseDateFromArtist(record);
+						}
+						
+					}
+
 					record.updateRecordInfo(manager);
 					record.addGenre(manager);
-					// put the genres in the DB as well!
-
 				}
 			}
 		}

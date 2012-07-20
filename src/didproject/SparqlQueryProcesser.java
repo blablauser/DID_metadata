@@ -158,9 +158,9 @@ public class SparqlQueryProcesser {
 
 	public static void getBoundArtistSongURIs(String queryStringDB,
 			Record record) {
-		
+
 		try {
-			
+
 			Query query = QueryFactory.create(queryStringDB);
 			QueryExecution qexec = QueryExecutionFactory.sparqlService(
 					"http://dbpedia.org/sparql", query);
@@ -249,7 +249,7 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("ERROR getting individual Song.");
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -320,9 +320,8 @@ public class SparqlQueryProcesser {
 						record.setBound(3);
 					else if (record.getBound() == 2)
 						record.setBound(4);
-					else
-						System.out
-								.println("======  getIndividualArtist: Something is very very WRONG!!! ");
+					else if (record.getBound() == 5)
+						record.setBound(11);
 
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
@@ -378,8 +377,7 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out
-							.println("ERROR getting individual getIndividualClassicalSong.");
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -456,17 +454,18 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out
-							.println("ERROR getting individual getIndividualClassicalArtist.");
+		
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
 				} else {
 					if (record.getBound() == 0)
 						record.setBound(6);
+					else if (record.getBound() == 2)
+						record.setBound(11);
 					else if (record.getBound() == 5)
 						record.setBound(7);
-					
+
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
 						Element element = (Element) resultList.item(i);
@@ -507,6 +506,7 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(1);
 		}
 	}
+
 	public static void getIndividualModernClassicalArtist(String queryStringDB,
 			Record record) {
 
@@ -534,9 +534,10 @@ public class SparqlQueryProcesser {
 				} else {
 					if (record.getBound() == 0)
 						record.setBound(6);
+					else if (record.getBound() == 2)
+						record.setBound(11);
 					else if (record.getBound() == 5)
 						record.setBound(7);
-					
 
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
@@ -561,12 +562,12 @@ public class SparqlQueryProcesser {
 								record.setArtistURI(artistURI);
 
 							}
-						}						
+						}
 					}
 					if (record.getGenreList().size() == 0) {
 
 						ArrayList<String> genre = new ArrayList<String>();
-						genre.add("Classical_other");
+						genre.add("Classical_Composers_general");
 						record.setGenreList(genre);
 					}
 				}
@@ -578,9 +579,8 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(1);
 		}
 	}
-	
-	public static void getAnyArtist(String queryStringDB,
-			Record record) {
+
+	public static void getAnyArtist(String queryStringDB, Record record) {
 
 		try {
 			Query query = QueryFactory.create(queryStringDB);
@@ -598,12 +598,12 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out
-							.println("ERROR getting individual getAnyArtist.");
+					
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
 				} else {
+					
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
 						Element element = (Element) resultList.item(i);
@@ -624,14 +624,16 @@ public class SparqlQueryProcesser {
 									child = child.getNextSibling();
 
 								String artistURI = child.getNodeValue();
-								if (artistURI.contains("http://dbpedia.org/resource/")) {
+								if (artistURI
+										.contains("http://dbpedia.org/resource/")) {
 									record.setArtistURI(artistURI);
-									record.setBound(9);
+									if (record.getBound() == 8)
+										record.setBound(10);
+									else record.setBound(9);
 								}
-
 							}
-						}						
-					}				
+						}
+					}
 				}
 			}
 			qexec.close();
@@ -641,11 +643,73 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(1);
 		}
 	}
+
+	public static void getAnySong(String queryStringDB, Record record) {
+
+		try {
+			Query query = QueryFactory.create(queryStringDB);
+			QueryExecution qexec = QueryExecutionFactory.sparqlService(
+					"http://dbpedia.org/sparql", query);
+			ResultSet resultsDBpedia = qexec.execSelect();
+
+			String xmlStrDBpedia = ResultSetFormatter
+					.asXMLString(resultsDBpedia);
+			// System.out.println(xmlStrDBpedia);
+			Document xmlFile = StringToXML.parse(xmlStrDBpedia);
+
+			if (xmlFile == null)
+				System.out.println("NULL DOCUMENT ERROR.");
+			else {
+				NodeList resultList = xmlFile.getElementsByTagName("result");
+				if (resultList.getLength() == 0) {
+
+					// TODO Do something with these results - so that you'll
+					// know
+					// further on!!!
+				} else {
+					for (int i = 0; i < resultList.getLength(); i++) {
+						// Get element
+						Element element = (Element) resultList.item(i);
+						NodeList bindingsList = element
+								.getElementsByTagName("binding");
+
+						for (int j = 0; j < bindingsList.getLength(); j++) {
+							Element binding = (Element) bindingsList.item(j);
+							String attribute = binding.getAttribute("name");
+
+							if (attribute.equals("song")) {
+								NodeList childList = binding
+										.getElementsByTagName("uri").item(0)
+										.getChildNodes();
+								Node child = childList.item(0);
+
+								while (child.getNodeType() != Node.TEXT_NODE)
+									child = child.getNextSibling();
+
+								String songURI = child.getNodeValue();
+								if (songURI
+										.contains("http://dbpedia.org/resource/")) {
+									record.setSongURI(songURI);
+									record.setBound(8);
+								}
+							}
+						}
+					}
+				}
+			}
+			qexec.close();
+			record.setTimed_out(0);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			record.setTimed_out(1);
+		}
+	}
+
 	public static void getReleaseDate(String queryStringDB, Record record) {
 
 		try {
 			Query query = QueryFactory.create(queryStringDB);
-			
+
 			QueryExecution qexec = QueryExecutionFactory.sparqlService(
 					"http://dbpedia.org/sparql", query);
 			ResultSet resultsDBpedia = qexec.execSelect();
@@ -661,7 +725,7 @@ public class SparqlQueryProcesser {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
 					System.out.println("NO getReleaseDate.");
-					if (record.getSongURI().length()!= 0 ) System.out.println(queryStringDB);
+					
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -763,6 +827,7 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(1);
 		}
 	}
+
 	public static void getArtistGenre(String queryStringDB, Record record) {
 
 		try {
@@ -844,8 +909,9 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO getArtistComment.");
-					if (record.getArtistURI().length()!= 0 ) System.out.println(queryStringDB);
+					if (record.getArtistURI().length() != 0)
+						System.out.println("NO getArtistComment.");
+						System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -905,8 +971,10 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO getCategoriesForSong.");
-					if (record.getSongURI().length()!= 0 ) System.out.println(queryStringDB);
+					
+					if (record.getSongURI().length() != 0)
+						System.out.println("NO getCategoriesForSong.");
+						System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -977,8 +1045,10 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO getCategoriesForArtist.");
-					if (record.getArtistURI().length()!= 0 ) System.out.println(queryStringDB);
+					
+					if (record.getArtistURI().length() != 0)
+						System.out.println("NO getCategoriesForArtist.");
+						System.out.println(queryStringDB);
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -1017,7 +1087,7 @@ public class SparqlQueryProcesser {
 							}
 						}
 					}
-					
+
 					record.setCategories_artist(categories_artist);
 				}
 			}

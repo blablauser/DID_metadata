@@ -176,9 +176,9 @@ public class Record {
 	 * */
 	public Record(int recordID, String artist, String title, String part_of,
 			String composer, String releasedOn, String artistURI,
-			String songURI, String artistComment, double genderRatio, String gender,
-			String categories_record, String categories_artist, int bound,
-			int timed_out) {
+			String songURI, String artistComment, double genderRatio,
+			String gender, String categories_record, String categories_artist,
+			int bound, int timed_out) {
 
 		this.setRecordID(recordID);
 		this.setArtist(artist);
@@ -422,7 +422,7 @@ public class Record {
 				+ "{ "
 				+ "?artist dcterms:subject [skos:broader category:Classical_music_era] ."
 				+ "?artist rdfs:label ?artistName ."
-//				+ "FILTER (LANG(?artistName) = 'en') ."
+				// + "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ." + "} " + "} LIMIT 1";
@@ -444,21 +444,31 @@ public class Record {
 				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
 	}
-	
+
 	public static String getAnyArtistQuery(Record record) {
 
 		// TODO fix for modern!!!!
 
-		String query = "SELECT DISTINCT * "
-				+ "WHERE {"
-				+ "{ "
+		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
 				+ "?artist foaf:page ?artistPage ."
 				+ "?artist rdfs:label ?artistName ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
-				+ "'\") ) ."
-				+ "} " + "} LIMIT 1";
+				+ "'\") ) ." + "} " + "} LIMIT 1";
+		return query;
+	}
+
+	public static String getAnySongQuery(Record record) {
+
+		// TODO fix for modern!!!!
+
+		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
+				+ "?song foaf:page ?songPage ."
+				+ "?song rdfs:label ?songTitle ."
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
 	}
 
@@ -474,7 +484,8 @@ public class Record {
 				+ StringEscape.escapeSparqlURL(record.getSongURI()) + ">"
 
 				+ " dbpedia-owl:genre ?genre} ." + "  OPTIONAL {<"
-				+ StringEscape.escapeSparqlURL(record.getSongURI()) + "> dbpedia2:genre ?genre} . " + "}";
+				+ StringEscape.escapeSparqlURL(record.getSongURI())
+				+ "> dbpedia2:genre ?genre} . " + "}";
 		return query;
 
 	}
@@ -484,7 +495,8 @@ public class Record {
 				+ StringEscape.escapeSparqlURL(record.getArtistURI()) + ">"
 
 				+ " dbpedia-owl:genre ?genre} ." + "  OPTIONAL {<"
-				+ StringEscape.escapeSparqlURL(record.getArtistURI()) + "> dbpedia2:genre ?genre} . " + "}";
+				+ StringEscape.escapeSparqlURL(record.getArtistURI())
+				+ "> dbpedia2:genre ?genre} . " + "}";
 		return query;
 
 	}
@@ -499,14 +511,16 @@ public class Record {
 
 	public static String getSubjectOfSongQuery(Record record) {
 		String query = "SELECT DISTINCT ?subject WHERE {" + " <"
-				+ StringEscape.escapeSparqlURL(record.getSongURI()) + "> dcterms:subject ?subject" + "}";
+				+ StringEscape.escapeSparqlURL(record.getSongURI())
+				+ "> dcterms:subject ?subject" + "}";
 		return query;
 
 	}
 
 	public static String getSubjectOfArtistQuery(Record record) {
 		String query = "SELECT DISTINCT ?subject WHERE {" + " <"
-				+ StringEscape.escapeSparqlURL(record.getArtistURI()) + "> dcterms:subject ?subject" + "}";
+				+ StringEscape.escapeSparqlURL(record.getArtistURI())
+				+ "> dcterms:subject ?subject" + "}";
 		return query;
 
 	}
@@ -531,7 +545,7 @@ public class Record {
 
 		record.setGenderRatio(ratio);
 		if ((they + them) > (she + her) && (they + them) > (he + his))
-			record.setGender("other");
+			record.setGender("band");
 		else if (ratio < 0.8)
 			record.setGender("male");
 		else if (ratio > 1.2)
@@ -546,8 +560,10 @@ public class Record {
 				StringEscape.escapeUrl(this.getArtistURI()), StringEscape
 						.escapeUrl(this.getSongURI()), StringEscape
 						.escapeSql(this.getArtistComment()), this.getGender(),
-				this.getGenderRatio(), this.getCategories_record().toString(),
-				this.getCategories_artist().toString(), this.getBound(), this
+				this.getGenderRatio(), StringEscape
+				.escapeSql(this.getCategories_record().toString()),
+				StringEscape
+				.escapeSql(this.getCategories_artist().toString()), this.getBound(), this
 						.getTimed_out());
 	}
 
@@ -571,6 +587,30 @@ public class Record {
 					System.out
 							.println("Something, somwhere, went terribly WRONG! ");
 			}
+		}
+	}
+
+	public static void getReleaseDateFromSong(Record record) {
+		int i = 0;
+		while (record.getReleasedOn().equals("0")
+				&& (i < record.getCategories_record().size())) {
+			String category = record.getCategories_record().get(i);
+			if (category.matches("^[0-9]{4}+_+.*+$")) {
+				record.setReleasedOn(category.substring(0, 4));
+			}
+			i++;
+		}
+	}
+
+	public static void getReleaseDateFromArtist(Record record) {
+		int i = 0;
+		while (record.getReleasedOn().equals("0")
+				&& (i < record.getCategories_artist().size())) {
+			String category = record.getCategories_artist().get(i);
+			if (category.matches("^[0-9]{2}+th-century+.*+$")) {
+				record.setReleasedOn(category.substring(0, 12));
+			}
+			i++;
 		}
 	}
 

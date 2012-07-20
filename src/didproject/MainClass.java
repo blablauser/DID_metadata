@@ -5,7 +5,6 @@ package didproject;
 public class MainClass {
 	public static void main(String args[]) {
 
-		
 		/**
 		 * TODO Get metadata about people!!!
 		 * 
@@ -19,18 +18,17 @@ public class MainClass {
 		 * AddAgeOfCastaway.run();
 		 * 
 		 * */
-		
+
 		/**
-		 * TODO RECORDS: Get metadata from DBpedia. 
-		 * CollectMetadataAboutSongsDBpedia.run();
-		 * */
-		
-		
-		
-		/**
-		 * TODO FIX records: Get metadata from DBpedia. 
+		 * TODO RECORDS: Get metadata from DBpedia.
 		 * 
 		 * */
-		CollectMetaSongsFixed.run();
+
+		/**
+		 * TODO FIX records: Get metadata from DBpedia.
+		 * CollectMetaSongsFixed.run();
+		 * */
+
+		CollectMetadataAboutSongsDBpedia.run();
 	}
 }
