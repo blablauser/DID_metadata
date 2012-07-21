@@ -176,7 +176,6 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("ERROR getting bound Resources.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -227,6 +226,12 @@ public class SparqlQueryProcesser {
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -287,6 +292,12 @@ public class SparqlQueryProcesser {
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -310,8 +321,8 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out
-							.println("ERROR getting individual getIndividualArtist.");
+					// System.out
+					// .println("ERROR getting individual getIndividualArtist.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -353,6 +364,12 @@ public class SparqlQueryProcesser {
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -431,6 +448,12 @@ public class SparqlQueryProcesser {
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -454,7 +477,7 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-		
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -503,6 +526,12 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(0);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -526,8 +555,8 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out
-							.println("ERROR getting individual getIndividualModernClassicalArtist.");
+					// System.out
+					// .println("ERROR getting individual getIndividualModernClassicalArtist.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -576,6 +605,12 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(0);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -598,12 +633,12 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
 				} else {
-					
+
 					for (int i = 0; i < resultList.getLength(); i++) {
 						// Get element
 						Element element = (Element) resultList.item(i);
@@ -627,8 +662,7 @@ public class SparqlQueryProcesser {
 								if (artistURI
 										.contains("http://dbpedia.org/resource/")) {
 									record.setArtistURI(artistURI);
-									if (record.getBound() == 8)
-										record.setBound(10);
+									if (record.getBound() == 8) record.setBound(10);
 									else record.setBound(9);
 								}
 							}
@@ -640,6 +674,12 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(0);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -701,6 +741,12 @@ public class SparqlQueryProcesser {
 			record.setTimed_out(0);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException inter) {
+				// TODO Auto-generated catch block
+				inter.printStackTrace();
+			}
 			record.setTimed_out(1);
 		}
 	}
@@ -724,8 +770,8 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO getReleaseDate.");
-					
+					// System.out.println("NO getReleaseDate.");
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -784,7 +830,7 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO genre.");
+					// System.out.println("NO genre.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -847,7 +893,7 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					System.out.println("NO getArtistGenre.");
+					// System.out.println("NO getArtistGenre.");
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -909,9 +955,11 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					if (record.getArtistURI().length() != 0)
-						System.out.println("NO getArtistComment.");
-						System.out.println(queryStringDB);
+					if (record.getArtistURI().length() != 0) {
+//						System.out.println("NO getArtistComment.");
+//						System.out.println(queryStringDB);
+					}
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -971,10 +1019,12 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					
-					if (record.getSongURI().length() != 0)
-						System.out.println("NO getCategoriesForSong.");
-						System.out.println(queryStringDB);
+
+					if (record.getSongURI().length() != 0) {
+//						System.out.println("NO getCategoriesForSong.");
+//						System.out.println(queryStringDB);
+					}
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!
@@ -1045,10 +1095,12 @@ public class SparqlQueryProcesser {
 			else {
 				NodeList resultList = xmlFile.getElementsByTagName("result");
 				if (resultList.getLength() == 0) {
-					
-					if (record.getArtistURI().length() != 0)
-						System.out.println("NO getCategoriesForArtist.");
-						System.out.println(queryStringDB);
+
+					if (record.getArtistURI().length() != 0) {
+//						System.out.println("NO getCategoriesForArtist.");
+//						System.out.println(queryStringDB);
+					}
+
 					// TODO Do something with these results - so that you'll
 					// know
 					// further on!!!

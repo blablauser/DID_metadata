@@ -32,10 +32,10 @@ public class StringEscape {
 
 		str = str.replaceAll("\"", "%22");
 		str = str.replaceAll("\'", "%27");
-		str = str.replaceAll("\\(", "%28");
-		str = str.replaceAll("\\)", "%29");
-		str = str.replaceAll("\\*", "%2A");
-		str = str.replaceAll("\\+", "%2B");
+//		str = str.replaceAll("\\(", "%28");
+//		str = str.replaceAll("\\)", "%29");
+//		str = str.replaceAll("\\*", "%2A");
+//		str = str.replaceAll("\\+", "%2B");
 		//str = str.replaceAll("/", "%2F");
 		// str = str.replaceAll(",", "%2C");
 		// str = str.replaceAll("-", "%2D");
@@ -90,6 +90,12 @@ public class StringEscape {
 		str = str.replaceAll("\\)", "");
 		str = str.replaceAll("\\+", "");
 		str = str.replaceAll("\\*", "");
+		return str;
+	}
+	
+	public static String EncodeDBpediaResource(String str){
+		str = str.replaceAll(" ", "_");
+		str = "http://dbpedia.org/resource/"+str;
 		return str;
 	}
 

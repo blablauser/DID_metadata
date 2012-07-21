@@ -30,13 +30,7 @@ public class CollectMetadataAboutSongsDBpedia {
 		recordIDs = manager.getIds("record", "recordID");
 
 		for (int i = 0; i < recordIDs.size(); i++) {
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 			// for each castawayID!!! get the rest of the fields
 			ArrayList<String> fields = new ArrayList<String>();
 			fields = manager.getRecord("record", recordIDs.get(i));
@@ -47,11 +41,16 @@ public class CollectMetadataAboutSongsDBpedia {
 					fields.get(11), fields.get(12), Integer.parseInt(fields
 							.get(13)), Integer.parseInt(fields.get(14)));
 			
-			System.out.println("Record:"+record.getRecordID());
-
 			if (record.getBound() == 0) {
-				// try to get bound resources
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
+				// try to get bound resources
+				System.out.println("Record:" + record.getRecordID());
 				SparqlQueryProcesser.getBoundArtistSongURIs(queryPrefix
 						+ Record.getLinkedResourcesQuery(record), record);
 				// b=1/0
@@ -114,7 +113,7 @@ public class CollectMetadataAboutSongsDBpedia {
 						}
 					}
 				}
-				
+
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -159,12 +158,12 @@ public class CollectMetadataAboutSongsDBpedia {
 					if (record.getReleasedOn().equals("0")) {
 						// try from song
 						Record.getReleaseDateFromSong(record);
-						
+
 						if (record.getReleasedOn().equals("0")) {
 							// try from artist
 							Record.getReleaseDateFromArtist(record);
 						}
-						
+
 					}
 
 					record.updateRecordInfo(manager);

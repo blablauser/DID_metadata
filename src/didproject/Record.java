@@ -450,25 +450,31 @@ public class Record {
 		// TODO fix for modern!!!!
 
 		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
-				+ "?artist foaf:page ?artistPage ."
 				+ "?artist rdfs:label ?artistName ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
-				+ "'\") ) ." + "} " + "} LIMIT 1";
+				+ "'\") ) ." + "OPTIONAL {?artist foaf:page ?artistPage }. }"
+				+ " UNION { ?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ." + "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape.escapeSparqlURL(record.getArtist()))
+				+ "> dbpedia-owl:wikiPageRedirects ?artist ." + "}"
+				+ "} LIMIT 1";
 		return query;
 	}
 
 	public static String getAnySongQuery(Record record) {
 
 		// TODO fix for modern!!!!
-
 		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
-				+ "?song foaf:page ?songPage ."
 				+ "?song rdfs:label ?songTitle ."
 				+ "FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
-				+ "'\") ) ." + "} " + "} LIMIT 1";
+				+ "'\") ) ." + "OPTIONAL {?song foaf:page ?songPage}. }"
+				+ " UNION {?song rdfs:label ?songTitle ." + "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape.escapeSparqlURL(record.getPart_of()))
+				+ "> dbpedia-owl:wikiPageRedirects ?song ." + "}" + "} LIMIT 1";
+
 		return query;
 	}
 
@@ -557,14 +563,13 @@ public class Record {
 
 	public void updateRecordInfo(DBManager manager) {
 		manager.updateRecord(this.getRecordID(), this.getReleasedOn(),
-				StringEscape.escapeUrl(this.getArtistURI()), StringEscape
-						.escapeUrl(this.getSongURI()), StringEscape
-						.escapeSql(this.getArtistComment()), this.getGender(),
-				this.getGenderRatio(), StringEscape
-				.escapeSql(this.getCategories_record().toString()),
-				StringEscape
-				.escapeSql(this.getCategories_artist().toString()), this.getBound(), this
-						.getTimed_out());
+				StringEscape.escapeUrl(this.getArtistURI()),
+				StringEscape.escapeUrl(this.getSongURI()),
+				StringEscape.escapeSql(this.getArtistComment()),
+				this.getGender(), this.getGenderRatio(),
+				StringEscape.escapeSql(this.getCategories_record().toString()),
+				StringEscape.escapeSql(this.getCategories_artist().toString()),
+				this.getBound(), this.getTimed_out());
 	}
 
 	public void addGenre(DBManager manager) {
