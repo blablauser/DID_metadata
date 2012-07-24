@@ -449,16 +449,89 @@ public class Record {
 
 		// TODO fix for modern!!!!
 
-		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
 				+ "?artist rdfs:label ?artistName ."
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
-				+ "'\") ) ." + "OPTIONAL {?artist foaf:page ?artistPage }. }"
+				+ "'\") ) ."
+				+ "?artist foaf:page ?artistPage . } "
+				+ "UNION { "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ "?artist foaf:isPrimaryTopicOf ?artistPage . }"
 				+ " UNION { ?artist rdfs:label ?artistName ."
-				+ "FILTER (LANG(?artistName) = 'en') ." + "<"
-				+ StringEscape.EncodeDBpediaResource(StringEscape.escapeSparqlURL(record.getArtist()))
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape
+						.escapeSparqlURL(record.getArtist()))
 				+ "> dbpedia-owl:wikiPageRedirects ?artist ." + "}"
+				+ "} LIMIT 1";
+		return query;
+	}
+
+	public static String getAnyArtistFIXQuery(Record record) {
+
+		// TODO fix for modern!!!!
+
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ " ?artist foaf:page ?artistPage . }"
+				+ " UNION { "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ " ?artist foaf:isPrimaryTopicOf ?artistPage . }"
+				+ " UNION { "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape
+						.escapeSparqlURL(record.getArtist()))
+				+ "> dbpedia-owl:wikiPageRedirects ?artist ." + "}"
+				+ "} LIMIT 1";
+		return query;
+	}
+
+	public static String getAnyArtistRedirectQuery(Record record) {
+
+		// TODO fix for modern!!!!
+
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ " ?artist foaf:page ?artistPage . }"
+				+ " UNION { "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ " ?artist foaf:isPrimaryTopicOf ?artistPage . }"
+				+ " UNION { "
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ " ?artist dbpedia-owl:wikiPageRedirects <"
+				+ StringEscape.EncodeDBpediaResource(StringEscape
+						.escapeSparqlURL(record.getArtist())) + "> ." + "}"
 				+ "} LIMIT 1";
 		return query;
 	}
@@ -466,13 +539,55 @@ public class Record {
 	public static String getAnySongQuery(Record record) {
 
 		// TODO fix for modern!!!!
-		String query = "SELECT DISTINCT * " + "WHERE {" + "{ "
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
 				+ "?song rdfs:label ?songTitle ."
 				+ "FILTER ( <bif:contains>(?songTitle, \"'"
 				+ StringEscape.escapeBifContains(record.getPart_of())
-				+ "'\") ) ." + "OPTIONAL {?song foaf:page ?songPage}. }"
-				+ " UNION {?song rdfs:label ?songTitle ." + "<"
-				+ StringEscape.EncodeDBpediaResource(StringEscape.escapeSparqlURL(record.getPart_of()))
+				+ "'\") ) ."
+				+ "?song foaf:page ?songPage. } "
+				+ "UNION { "
+				+ "?song rdfs:label ?songTitle ."
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
+				+ "?song foaf:isPrimaryTopicOf ?songPage. }"
+				+ " UNION "
+				+ "{?song rdfs:label ?songTitle ."
+				+ "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape
+						.escapeSparqlURL(record.getPart_of()))
+				+ "> dbpedia-owl:wikiPageRedirects ?song ." + "}" + "} LIMIT 1";
+
+		return query;
+	}
+
+	public static String getAnySongFIXQuery(Record record) {
+
+		// TODO fix for modern!!!!
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
+				+ "?song rdfs:label ?songTitle ."
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "' AND 'song'\") ) ."
+				+ "?song foaf:page ?songPage. } "
+				+ "UNION {"
+				+ "?song rdfs:label ?songTitle ."
+				+ " ?song foaf:page ?songPage ."
+				+ "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape
+						.escapeSparqlURL(record.getPart_of()))
+				+ "> dbpedia-owl:wikiPageRedirects ?song ."
+				+ "} "
+				+ "UNION {"
+				+ "?song rdfs:label ?songTitle ."
+				+ "?song foaf:isPrimaryTopicOf ?songPage ."
+				+ "<"
+				+ StringEscape.EncodeDBpediaResource(StringEscape
+						.escapeSparqlURL(record.getPart_of()))
 				+ "> dbpedia-owl:wikiPageRedirects ?song ." + "}" + "} LIMIT 1";
 
 		return query;

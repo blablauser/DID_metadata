@@ -176,6 +176,9 @@ class DBManager {
 			result.add(rs.getString("link"));
 			result.add(rs.getString("gender"));
 			result.add(rs.getString("occupation"));
+			result.add(rs.getString("dateOfBirth"));
+			result.add(rs.getString("found"));
+			result.add(rs.getString("dangerous"));
 
 		} catch (Exception e) {
 			System.err.println("ERROR: Get Castaway e.getm: " + e.getMessage());

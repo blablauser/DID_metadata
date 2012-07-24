@@ -11,9 +11,27 @@ public class Person {
 	private String occupations;
 	private String dateOfBirth;
 	private String key;
+	private int found;
+	private int dangerous;
 	private boolean onDBpedia;
 
 	private ArrayList<String> categories;
+
+	public Person(int id, String name, String link, String gender,
+			String occupations, String dateOfBirth, int found, int dangerous) {
+		this.setId(id);
+		this.setName(name);
+		this.setLink(link);
+		this.setGender(gender);
+		this.setOccupations(occupations);
+		this.setDateOfBirth(dateOfBirth);
+		if (found == 1)
+			this.setOnDBpedia(true);
+		else
+			this.setOnDBpedia(false);
+		this.setKey("");
+		this.setDangerous(dangerous);
+	}
 
 	public Person(int id, String name, String link, String gender,
 			String occupations) {
@@ -83,6 +101,22 @@ public class Person {
 		this.dateOfBirth = dateOfBirth;
 	}
 
+	public void setFound(int found) {
+		this.found = found;
+	}
+
+	public int getFound() {
+		return found;
+	}
+
+	public void setDangerous(int dangerous) {
+		this.dangerous = dangerous;
+	}
+
+	public int getDangerous() {
+		return dangerous;
+	}
+
 	public String createDBpediaLink(String wikiLink) {
 		wikiLink = wikiLink.replaceAll("http://en.wikipedia.org/wiki/",
 				"http://dbpedia.org/resource/");
@@ -94,30 +128,36 @@ public class Person {
 		String[] occupationsList = this.occupations.split(";");
 		for (int j = 0; j < occupationsList.length; j++) {
 
-			int occupationID = manager.exists("occupationID", "occupation", "name",
-					StringEscape.escapeSql(occupationsList[j]));
+			int occupationID = manager.exists("occupationID", "occupation",
+					"name", StringEscape.escapeSql(occupationsList[j]));
 			if (occupationID > 0) {
 				// id exists in db, then add FK for "worksAs"
-                
+
 				manager.addWorksAs(this.getId(), occupationID);
 			} else {
 				// add occupation to the DB
-				manager.addOccupation(StringEscape.escapeSql(occupationsList[j]));
-				int var = manager.exists("occupationID","occupation", "name", StringEscape.escapeSql(occupationsList[j]));
+				manager.addOccupation(StringEscape
+						.escapeSql(occupationsList[j]));
+				int var = manager.exists("occupationID", "occupation", "name",
+						StringEscape.escapeSql(occupationsList[j]));
 				if (var > 0) {
-					
+
 					manager.addWorksAs(this.getId(), var);
-				} else System.out.println("Something, somwhere, went terribly WRONG! ");
+				} else
+					System.out
+							.println("Something, somwhere, went terribly WRONG! ");
 			}
 		}
 	}
 
 	public void flagCastaway(DBManager manager) {
 		manager.flagCastaway(this.getId(), "found", this.getOnDBpedia());
+		manager.flagCastaway(this.getId(), "dangerous", this.getDangerous());
 	}
-	
+
 	public void addDateOfBirthToDatabase(DBManager manager) {
-		manager.addDoBCastaway(this.getId(), "dateOfBirth", Integer.parseInt(this.getDateOfBirth()));
+		manager.addDoBCastaway(this.getId(), "dateOfBirth",
+				Integer.parseInt(this.getDateOfBirth()));
 	}
 
 	public void setOnDBpedia(boolean isOnDBpedia) {

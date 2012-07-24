@@ -58,7 +58,7 @@ public class SparqlQueryProcesser {
 						castaway.setName(name);
 						// System.out.println(value);
 
-					} else if (attribute.equals("page")) {
+					} else if (attribute.equals("person")) {
 						NodeList childList = binding
 								.getElementsByTagName("uri").item(0)
 								.getChildNodes();
@@ -222,12 +222,12 @@ public class SparqlQueryProcesser {
 					}
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -288,12 +288,12 @@ public class SparqlQueryProcesser {
 					}
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -360,12 +360,12 @@ public class SparqlQueryProcesser {
 					}
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -444,12 +444,12 @@ public class SparqlQueryProcesser {
 					}
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -523,11 +523,11 @@ public class SparqlQueryProcesser {
 				}
 			}
 			qexec.close();
-			record.setTimed_out(0);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -602,11 +602,11 @@ public class SparqlQueryProcesser {
 				}
 			}
 			qexec.close();
-			record.setTimed_out(0);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -671,11 +671,11 @@ public class SparqlQueryProcesser {
 				}
 			}
 			qexec.close();
-			record.setTimed_out(0);
+		
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -738,11 +738,11 @@ public class SparqlQueryProcesser {
 				}
 			}
 			qexec.close();
-			record.setTimed_out(0);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(120000);
 			} catch (InterruptedException inter) {
 				// TODO Auto-generated catch block
 				inter.printStackTrace();
@@ -804,7 +804,7 @@ public class SparqlQueryProcesser {
 				}
 			}
 			qexec.close();
-			record.setTimed_out(0);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			record.setTimed_out(1);
@@ -866,7 +866,7 @@ public class SparqlQueryProcesser {
 					record.setGenreList(genreList);
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -929,7 +929,7 @@ public class SparqlQueryProcesser {
 					record.setGenreList(genreList);
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -992,7 +992,7 @@ public class SparqlQueryProcesser {
 					}
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -1066,7 +1066,7 @@ public class SparqlQueryProcesser {
 					record.setCategories_record(categories_record);
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -1143,7 +1143,7 @@ public class SparqlQueryProcesser {
 					record.setCategories_artist(categories_artist);
 				}
 			}
-			record.setTimed_out(0);
+			
 			qexec.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
