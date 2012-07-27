@@ -331,7 +331,7 @@ public class SparqlQueryProcesser {
 						record.setBound(3);
 					else if (record.getBound() == 2)
 						record.setBound(4);
-					else if (record.getBound() == 5)
+					else if (record.getBound() == 5) // classical song
 						record.setBound(11);
 
 					for (int i = 0; i < resultList.getLength(); i++) {
@@ -485,7 +485,7 @@ public class SparqlQueryProcesser {
 					if (record.getBound() == 0)
 						record.setBound(6);
 					else if (record.getBound() == 2)
-						record.setBound(11);
+						record.setBound(12);
 					else if (record.getBound() == 5)
 						record.setBound(7);
 
@@ -564,7 +564,7 @@ public class SparqlQueryProcesser {
 					if (record.getBound() == 0)
 						record.setBound(6);
 					else if (record.getBound() == 2)
-						record.setBound(11);
+						record.setBound(12);
 					else if (record.getBound() == 5)
 						record.setBound(7);
 
@@ -662,8 +662,9 @@ public class SparqlQueryProcesser {
 								if (artistURI
 										.contains("http://dbpedia.org/resource/")) {
 									record.setArtistURI(artistURI);
-									if (record.getBound() == 8) record.setBound(10);
-									else record.setBound(9);
+									if (record.getBound() == 0) record.setBound(9);
+									else if (record.getBound() == 8) record.setBound(10);
+									else record.setBound(13);
 								}
 							}
 						}
@@ -730,7 +731,9 @@ public class SparqlQueryProcesser {
 								if (songURI
 										.contains("http://dbpedia.org/resource/")) {
 									record.setSongURI(songURI);
-									record.setBound(8);
+									if (record.getBound() == 0) record.setBound(8);
+									else if (record.getBound() == 9) record.setBound(10);
+									else record.setBound(13);
 								}
 							}
 						}

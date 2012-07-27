@@ -1,6 +1,17 @@
 package didproject;
 
+import java.util.Random;
+
 public class StringEscape {
+	
+	public static void generateRandom(int number, int max) {
+		Random randomGenerator = new Random();
+		for (int idx = 1; idx <= number; ++idx) {
+			int randomInt = randomGenerator.nextInt(max);
+			System.out.print("," + randomInt);
+		}
+
+	}
 
 	public static String escapeSql(String str) {
 		str = str.replaceAll("\'", "%27");

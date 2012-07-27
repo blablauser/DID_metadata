@@ -1,5 +1,7 @@
 package didproject;
 
+import java.util.Random;
+
 //import java.util.ArrayList;
 
 public class MainClass {
@@ -30,12 +32,18 @@ public class MainClass {
 		 * 
 		 * CollectMetadataAboutSongsDBpedia.run();
 		 * */
-		// run again for people.
 
-		CollectMetadataAboutGuests.run();
-		// run again for BOUND=0 records (and Sergey Vasilievich Rachmaninov =
-		// Sergei Vasilievich Rachmaninoff!!! ) -  but use the fixed queries 
+		/**
+		 * run again for people.
+		 * 
+		 * CollectMetadataAboutGuests.run(); // run again for BOUND=0 records
+		 * (and Sergey Vasilievich Rachmaninov = // Sergei Vasilievich
+		 * Rachmaninoff!!! ) - but use the fixed queries
+		 * CollectMetadataAboutSongsDBpedia.run();
+		 */
 		CollectMetadataAboutSongsDBpedia.run();
+		// GET THE UNIVERSITY FOR PEOPLE.
+		//StringEscape.generateRandom(100, 13110);
 
 	}
 }

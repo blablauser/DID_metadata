@@ -342,7 +342,7 @@ public class Record {
 				+ "} "
 
 				+ "UNION {"
-				+ "?song rdf:type <http://dbpedia.org/ontology/Work> ."
+				+ "?song rdf:type <http://dbpedia.org/ontology/MusicalWork> ."
 				+ " ?song rdfs:label ?songTitle ."
 				// + " FILTER (LANG(?songTitle) = 'en') ."
 				+ " FILTER ( <bif:contains>(?songTitle, \"'"
@@ -441,7 +441,15 @@ public class Record {
 				+ "FILTER (LANG(?artistName) = 'en') ."
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
-				+ "'\") ) ." + "} " + "} LIMIT 1";
+				+ "'\") ) ."
+				+ "} "
+				+ "UNION { "
+				+ "?artist dcterms:subject [skos:broader category:Opera_singers] ."
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ." + "}" + "} LIMIT 1";
 		return query;
 	}
 
@@ -596,7 +604,7 @@ public class Record {
 	public static String getReleaseDateQuery(Record record) {
 		String query = "SELECT DISTINCT * " + "WHERE " + "{ " + "<"
 				+ StringEscape.escapeSparqlURL(record.getSongURI()) + ">"
-				+ " dbpedia-owl:releaseDate ?releaseDate} ";
+				+ " dbpedia-owl:releaseDate ?releaseDate" + "} ";
 		return query;
 	}
 
@@ -659,13 +667,16 @@ public class Record {
 				.toLowerCase(), " they ");
 		double them = StringEscape.countOccurances(record.getArtistComment()
 				.toLowerCase(), " them ");
+		double their = StringEscape.countOccurances(record.getArtistComment()
+				.toLowerCase(), " their ");
 
 		double ratio = (she + her) / (he + his);
 		if ((he + his) == 0)
 			ratio = (she + her);
 
 		record.setGenderRatio(ratio);
-		if ((they + them) > (she + her) && (they + them) > (he + his))
+		if (((they + them + their) > (she + her))
+				&& ((they + them + their) > (he + his)))
 			record.setGender("band");
 		else if (ratio < 0.8)
 			record.setGender("male");
@@ -712,6 +723,7 @@ public class Record {
 
 	public static void getReleaseDateFromSong(Record record) {
 		int i = 0;
+
 		while (record.getReleasedOn().equals("0")
 				&& (i < record.getCategories_record().size())) {
 			String category = record.getCategories_record().get(i);
@@ -720,6 +732,7 @@ public class Record {
 			}
 			i++;
 		}
+
 	}
 
 	public static void getReleaseDateFromArtist(Record record) {
