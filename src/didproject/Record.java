@@ -17,6 +17,7 @@ public class Record {
 	private ArrayList<String> genreList; // not on DB!!!
 	private ArrayList<String> categories_record;
 	private ArrayList<String> categories_artist;
+	private int classical;
 	private int bound;
 	private int timed_out;
 
@@ -152,6 +153,7 @@ public class Record {
 			String composer, String releasedOn, String artistURI,
 			String songURI, String artistComment, double genderRatio,
 			int bound, int timed_out) {
+		this.setClassical(0);
 		this.setRecordID(recordID);
 		this.setArtist(artist);
 		this.setTitle(title);
@@ -180,6 +182,7 @@ public class Record {
 			String gender, String categories_record, String categories_artist,
 			int bound, int timed_out) {
 
+		this.setClassical(0);
 		this.setRecordID(recordID);
 		this.setArtist(artist);
 		this.setTitle(title);
@@ -323,6 +326,49 @@ public class Record {
 				+ "'\") ) ."
 
 				+ "}" + "} LIMIT 1";
+
+		return query;
+	}
+
+	public static String getAnyLinkedResourcesQuery(Record record) {
+		String query = "SELECT DISTINCT * WHERE {"
+				+ "{ "
+
+				+ "?song rdfs:label ?songTitle ."
+				// + "FILTER (LANG(?songTitle) = 'en') ."
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
+
+				+ "?song dbpedia-owl:musicalArtist ?artist ."
+
+				+ "?artist rdfs:label ?artistName ."
+				// + "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
+				+ "} "
+
+				// ##
+				// ## change the artist link to :musicalBand
+				// ##
+				+ "UNION { "
+				+ "?song rdfs:label ?songTitle ."
+				// + "FILTER (LANG(?songTitle) = 'en') ."
+				+ "FILTER ( <bif:contains>(?songTitle, \"'"
+				+ StringEscape.escapeBifContains(record.getPart_of())
+				+ "'\") ) ."
+
+				+ "?song dbpedia-owl:musicalBand ?artist ."
+
+				+ "?artist rdfs:label ?artistName ."
+				// + "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+
+				+ "} " + "} LIMIT 1";
 
 		return query;
 	}
@@ -654,6 +700,14 @@ public class Record {
 
 	}
 
+	public void setClassical(int classical) {
+		this.classical = classical;
+	}
+
+	public int getClassical() {
+		return classical;
+	}
+
 	public static void calculateGender(Record record) {
 		double he = StringEscape.countOccurances(record.getArtistComment()
 				.toLowerCase(), " he ");
@@ -695,7 +749,7 @@ public class Record {
 				this.getGender(), this.getGenderRatio(),
 				StringEscape.escapeSql(this.getCategories_record().toString()),
 				StringEscape.escapeSql(this.getCategories_artist().toString()),
-				this.getBound(), this.getTimed_out());
+				this.getBound(), this.getTimed_out(), this.getClassical());
 	}
 
 	public void addGenre(DBManager manager) {
@@ -742,6 +796,19 @@ public class Record {
 			String category = record.getCategories_artist().get(i);
 			if (category.matches("^[0-9]{2}+th-century+.*+$")) {
 				record.setReleasedOn(category.substring(0, 12));
+			}
+			i++;
+		}
+	}
+
+	public void checkCategories(String category) {
+		String[] list = { "opera", "operas", "tenor", "sopranos", "ballet",
+				"musical", "sonata", "concerto", "symphony", "orchestra",
+				"ballets", "composers", "pianists", "classical" };
+		int i = 0;
+		while (this.getClassical() == 0 && i < list.length) {
+			if (category.toLowerCase().contains(list[i])) {
+				this.setClassical(1);
 			}
 			i++;
 		}

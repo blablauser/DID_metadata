@@ -43,7 +43,7 @@ public class CollectMetadataAboutSongsDBpedia {
 							.get(13)), Integer.parseInt(fields.get(14)));
 
 			if (record.getBound() == 0) {
-				
+
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -55,23 +55,29 @@ public class CollectMetadataAboutSongsDBpedia {
 				System.out.println("Record:" + record.getRecordID());
 				SparqlQueryProcesser.getBoundArtistSongURIs(queryPrefix
 						+ Record.getLinkedResourcesQuery(record), record);
+
+				if (record.getSongURI().equals(""))
+					SparqlQueryProcesser
+							.getBoundArtistSongURIs(
+									queryPrefix
+											+ Record.getAnyLinkedResourcesQuery(record),
+									record);
 				// b=1/0
 
 				if (record.getSongURI().equals("")) {
-					// get individual song
-					SparqlQueryProcesser
-							.getIndividualSong(
-									queryPrefix
-											+ Record.getIndividualSongQuery(record),
-									record);
+					// not found individual song, look for classical
+					SparqlQueryProcesser.getIndividualClassicalSong(queryPrefix
+							+ Record.getIndividualClassicalSongQuery(record),
+							record);
 					// b=2/0
 
 					if (record.getSongURI().equals("")) {
-						// not found individual song, look for classical
+
+						// get individual song
 						SparqlQueryProcesser
-								.getIndividualClassicalSong(
+								.getIndividualSong(
 										queryPrefix
-												+ Record.getIndividualClassicalSongQuery(record),
+												+ Record.getIndividualSongQuery(record),
 										record);
 						// b = 5/0
 						if (record.getSongURI().equals("")) {
@@ -86,24 +92,29 @@ public class CollectMetadataAboutSongsDBpedia {
 				}
 
 				// b=0/1/2/5/8
+
+				// b=0/2/5/8/3/4/11
 				if (record.getArtistURI().equals("")) {
-					// get indiv artist
-					SparqlQueryProcesser.getIndividualArtist(queryPrefix
-							+ Record.getIndividualArtistQuery(record), record);
-					// b=0/2/5/8/3/4/11
+					// get classical artist
+					SparqlQueryProcesser
+							.getIndividualClassicalArtist(
+									queryPrefix
+											+ Record.getIndividualClassicalArtistQuery(record),
+									record);
 					if (record.getArtistURI().equals("")) {
-						// get classical artist
+						// get Modern Classical artist
 						SparqlQueryProcesser
-								.getIndividualClassicalArtist(
+								.getIndividualModernClassicalArtist(
 										queryPrefix
-												+ Record.getIndividualClassicalArtistQuery(record),
+												+ Record.getIndividualModernClassicalArtistQuery(record),
 										record);
 						if (record.getArtistURI().equals("")) {
-							// get Modern Classical artist
+
+							// get indiv artist
 							SparqlQueryProcesser
-									.getIndividualModernClassicalArtist(
+									.getIndividualArtist(
 											queryPrefix
-													+ Record.getIndividualModernClassicalArtistQuery(record),
+													+ Record.getIndividualArtistQuery(record),
 											record);
 							if (record.getArtistURI().equals("")) {
 								// get ANY artist
@@ -123,16 +134,6 @@ public class CollectMetadataAboutSongsDBpedia {
 					e.printStackTrace();
 				}
 
-				if (record.getSongURI().length() != 0) {
-					// query for resources for songs
-					SparqlQueryProcesser.getReleaseDate(
-							queryPrefix + Record.getReleaseDateQuery(record),
-							record);
-
-					SparqlQueryProcesser.getCategoriesForSong(queryPrefix
-							+ Record.getSubjectOfSongQuery(record), record);
-				}
-
 				if (record.getArtistURI().length() != 0) {
 					// query for resources for artist
 					SparqlQueryProcesser.getCategoriesForArtist(queryPrefix
@@ -144,13 +145,26 @@ public class CollectMetadataAboutSongsDBpedia {
 						Record.calculateGender(record);
 				}
 
-				if (record.getGenreList().size() == 0) {
-					SparqlQueryProcesser.getGenre(
-							queryPrefix + Record.getSongGenreQuery(record),
+				if (record.getSongURI().length() != 0) {
+					// query for resources for songs
+					SparqlQueryProcesser.getReleaseDate(
+							queryPrefix + Record.getReleaseDateQuery(record),
 							record);
+
+					SparqlQueryProcesser.getCategoriesForSong(queryPrefix
+							+ Record.getSubjectOfSongQuery(record), record);
+				}
+
+				if (record.getGenreList().size() == 0) {
+					SparqlQueryProcesser.getArtistGenre(
+							queryPrefix + Record.getArtistGenreQuery(record),
+							record);
+
 					if (record.getGenreList().size() == 0) {
-						SparqlQueryProcesser.getArtistGenre(queryPrefix
-								+ Record.getArtistGenreQuery(record), record);
+
+						SparqlQueryProcesser.getGenre(
+								queryPrefix + Record.getSongGenreQuery(record),
+								record);
 					}
 				}
 				if (record.getBound() != 0) {
@@ -159,11 +173,12 @@ public class CollectMetadataAboutSongsDBpedia {
 					// mine for release date, in case it's 0
 					if (record.getReleasedOn().equals("0")) {
 						// try from song
-						Record.getReleaseDateFromSong(record);
+						Record.getReleaseDateFromArtist(record);
 
 						if (record.getReleasedOn().equals("0")) {
 							// try from artist
-							Record.getReleaseDateFromArtist(record);
+
+							Record.getReleaseDateFromSong(record);
 						}
 
 					}

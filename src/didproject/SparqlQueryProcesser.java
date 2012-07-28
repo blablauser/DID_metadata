@@ -438,6 +438,7 @@ public class SparqlQueryProcesser {
 								genre = genre.substring(0, genre.length() - 9);
 								ArrayList<String> genreList = new ArrayList<String>();
 								genreList.add(genre);
+								record.setClassical(1);
 								record.setGenreList(genreList);
 							}
 						}
@@ -514,6 +515,7 @@ public class SparqlQueryProcesser {
 							}
 						}
 					}
+					record.setClassical(1);
 					if (record.getGenreList().size() == 0) {
 
 						ArrayList<String> genre = new ArrayList<String>();
@@ -593,6 +595,7 @@ public class SparqlQueryProcesser {
 							}
 						}
 					}
+					record.setClassical(1);
 					if (record.getGenreList().size() == 0) {
 
 						ArrayList<String> genre = new ArrayList<String>();
@@ -1061,6 +1064,7 @@ public class SparqlQueryProcesser {
 												"http://dbpedia.org/resource/Category:",
 												"");
 								categories_record.add(value);
+								record.checkCategories(value);
 
 								// get date of birth, if any:
 							}
@@ -1137,6 +1141,7 @@ public class SparqlQueryProcesser {
 												"http://dbpedia.org/resource/Category:",
 												"");
 								categories_artist.add(value);
+								record.checkCategories(value);
 
 								// get date of birth, if any:
 							}

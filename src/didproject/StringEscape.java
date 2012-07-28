@@ -12,6 +12,7 @@ public class StringEscape {
 		}
 
 	}
+	
 
 	public static String escapeSql(String str) {
 		str = str.replaceAll("\'", "%27");

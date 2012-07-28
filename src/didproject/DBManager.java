@@ -90,7 +90,7 @@ class DBManager {
 				+ castawayID + "," + categoryID + ")");
 		DBaccess.disconnect();
 	}
-	
+
 	public void addGenreOf(int genreID, int recordID) {
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update("INSERT INTO genreOf (genreID,recordID) VALUES ("
@@ -116,7 +116,7 @@ class DBManager {
 		DBaccess.update("INSERT INTO genre (name) VALUES ('" + name + "')");
 		DBaccess.disconnect();
 	}
-	
+
 	public void addOccupation(String name) {
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update("INSERT INTO occupation (name) VALUES ('" + name + "')");
@@ -132,20 +132,21 @@ class DBManager {
 		DBaccess.disconnect();
 	}
 
-	
 	public void updateRecord(int id, String releasedOn, String artistURI,
 			String songURI, String artistComment, String gender,
 			double genderRatio, String categories_record,
-			String categories_artist, int bound, int timed_out) {
+			String categories_artist, int bound, int timed_out, int classical) {
 		String q = "UPDATE record SET releasedOn = '" + releasedOn
 				+ "', artistURI= '" + artistURI + "', songURI='" + songURI
 				+ "', artistComment='" + artistComment + "', gender='" + gender
 				+ "',genderRatio=" + genderRatio + ", categories_record='"
 				+ categories_record + "', categories_artist='"
-				+ categories_artist + "', bound = '"+bound+"', timed_out = '"+timed_out+"'  WHERE recordID = '" + id + "'";
+				+ categories_artist + "', bound = '" + bound
+				+ "', timed_out = '" + timed_out + "', classical='" + classical
+				+ "'  WHERE recordID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
-		System.err.println("UPDATE record "+id+":" + q);
+		System.err.println("UPDATE record " + id + ":" + q);
 		DBaccess.disconnect();
 	}
 
@@ -257,8 +258,6 @@ class DBManager {
 		}
 
 	}
-
-
 
 	// //
 	// // public int size(String tblName) {
