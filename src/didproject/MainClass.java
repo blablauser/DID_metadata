@@ -28,7 +28,6 @@ public class MainClass {
 
 		/**
 		 * TODO FIX records: Get metadata from DBpedia.
-		 * CollectMetaSongsFixed.run();#
 		 * 
 		 * CollectMetadataAboutSongsDBpedia.run();
 		 * */
@@ -43,7 +42,7 @@ public class MainClass {
 		 */
 		CollectMetadataAboutSongsDBpedia.run();
 		// GET THE UNIVERSITY FOR PEOPLE.
-		//StringEscape.generateRandom(100, 13110);
+		// StringEscape.generateRandom(100, 13110);
 
 	}
 }

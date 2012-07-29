@@ -259,25 +259,4 @@ class DBManager {
 
 	}
 
-	// //
-	// // public int size(String tblName) {
-	// try {
-	// DBaccess.connect(host, port, user, password, dbname);
-	// ResultSet rs = DBaccess.retrieve("SELECT COUNT(*) FROM `" + tblName
-	// + "`");
-	// rs.first();
-	// n = Integer.parseInt(rs.getString("COUNT(*)"));
-	// System.err.println("TS____ N= " + n);
-	// } catch (SQLException ex) {
-	// System.err.println("TS_SQL_ERR_INS = " + ex.getMessage());
-	// System.err.println("SELECT COUNT(*) FROM \"" + tblName + "\"");
-	// } catch (NumberFormatException ex) {
-	// System.err.println("TS_SQL_NUMFORMAT_INS = " + ex.getMessage());
-	// } finally {
-	// DBaccess.disconnect();
-	// return n;
-	// }
-	//
-	// }
-
 }

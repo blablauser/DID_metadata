@@ -109,20 +109,28 @@ public class CollectMetadataAboutSongsDBpedia {
 												+ Record.getIndividualModernClassicalArtistQuery(record),
 										record);
 						if (record.getArtistURI().equals("")) {
-
-							// get indiv artist
-							SparqlQueryProcesser
-									.getIndividualArtist(
-											queryPrefix
-													+ Record.getIndividualArtistQuery(record),
-											record);
+							SparqlQueryProcesser.getWriters(queryPrefix
+									+ Record.getWritersQuery(record), record);
+							
 							if (record.getArtistURI().equals("")) {
 								// get ANY artist
-								SparqlQueryProcesser.getAnyArtist(queryPrefix
-										+ Record.getAnyArtistQuery(record),
-										record);
+								SparqlQueryProcesser
+										.getIndividualArtist(
+												queryPrefix
+														+ Record.getIndividualArtistQuery(record),
+												record);
+								if (record.getArtistURI().equals("")) {
+									// get ANY artist
+									SparqlQueryProcesser
+											.getAnyArtist(
+													queryPrefix
+															+ Record.getAnyArtistQuery(record),
+													record);
 
-							}
+								}
+
+							}// get indiv artist
+
 						}
 					}
 				}

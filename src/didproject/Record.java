@@ -451,8 +451,8 @@ public class Record {
 		// bound = 5, if found
 		String query = "SELECT DISTINCT * " + "WHERE {"
 				+ "{ "
-				+ "?song rdf:type [rdfs:subClassOf ?genre] ."
-				+ "?genre rdfs:subClassOf yago:ClassicalMusic107025900 ."
+				+ "?song rdf:type [rdfs:suBClassOf ?genre] ."
+				+ "?genre rdfs:suBClassOf yago:ClassicalMusic107025900 ."
 				+ "?song rdfs:label ?songTitle ."
 				// + "FILTER (LANG(?songTitle) = 'en') ."
 				+ "FILTER ( <bif:contains>(?songTitle, \"'"
@@ -496,6 +496,28 @@ public class Record {
 				+ "FILTER ( <bif:contains>(?artistName, \"'"
 				+ StringEscape.escapeBifContains(record.getArtist())
 				+ "'\") ) ." + "}" + "} LIMIT 1";
+		return query;
+	}
+
+	public static String getWritersQuery(Record record) {
+
+		// TODO fix for modern!!!!
+
+		String query = "SELECT DISTINCT * "
+				+ "WHERE {"
+				+ "{ "
+				+ "?artist dcterms:subject [skos:broader category:Poets] ."
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ."
+				+ "} UNION {?artist dcterms:subject [skos:broader category:English_writers] ."
+				+ "?artist rdfs:label ?artistName ."
+				+ "FILTER (LANG(?artistName) = 'en') ."
+				+ "FILTER ( <bif:contains>(?artistName, \"'"
+				+ StringEscape.escapeBifContains(record.getArtist())
+				+ "'\") ) ." + "} " + "} LIMIT 1";
 		return query;
 	}
 
@@ -802,7 +824,7 @@ public class Record {
 	}
 
 	public void checkCategories(String category) {
-		String[] list = { "opera", "operas", "tenor", "sopranos", "ballet",
+		String[] list = { "opera", "operas", "ballet",
 				"musical", "sonata", "concerto", "symphony", "orchestra",
 				"ballets", "composers", "pianists", "classical" };
 		int i = 0;
