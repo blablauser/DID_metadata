@@ -259,4 +259,21 @@ class DBManager {
 
 	}
 
+	public void updateMbzArtistinfo(int recordID, String mbz_type,
+			String mbz_country, String mbz_disambiguation,
+			String mbz_life_begin, String mbz_life_end, String mbz_life_ended,
+			String mbz_arid) {
+		// TODO Auto-generated method stub
+		String q = "UPDATE record SET mbz_type = '" + mbz_type
+				+ "', mbz_country= '" + mbz_country + "', mbz_disambiguation='"
+				+ mbz_disambiguation + "', mbz_life_begin='" + mbz_life_begin
+				+ "', mbz_life_end='" + mbz_life_end + "',mbz_life_ended="
+				+ mbz_life_ended + ", mbz_arid='" + mbz_arid
+				+ "' WHERE recordID = '" + recordID + "'";
+		DBaccess.connect(host, port, user, password, dbname);
+		DBaccess.update(q);
+		System.err.println("UPDATE MBZ artist info for record " + recordID + ":" + q);
+		DBaccess.disconnect();
+	}
+
 }

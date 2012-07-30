@@ -21,6 +21,80 @@ public class Record {
 	private int bound;
 	private int timed_out;
 
+	// MusicBrainz fields
+	private String mbz_gender;
+	private String mbz_type;
+	private String mbz_country;
+	private String mbz_disambiguation;
+	private String mbz_life_begin;
+	private String mbz_life_end;
+	private String mbz_life_ended;
+	private String mbz_arid;
+
+	public String getMbz_gender() {
+		return mbz_gender;
+	}
+
+	public void setMbz_gender(String mbz_gender) {
+		this.mbz_gender = mbz_gender;
+	}
+
+	public String getMbz_type() {
+		return mbz_type;
+	}
+
+	public void setMbz_type(String mbz_type) {
+		this.mbz_type = mbz_type;
+	}
+
+	public String getMbz_country() {
+		return mbz_country;
+	}
+
+	public void setMbz_country(String mbz_country) {
+		this.mbz_country = mbz_country;
+	}
+
+	public String getMbz_disambiguation() {
+		return mbz_disambiguation;
+	}
+
+	public void setMbz_disambiguation(String mbz_disambiguation) {
+		this.mbz_disambiguation = mbz_disambiguation;
+	}
+
+	public String getMbz_life_begin() {
+		return mbz_life_begin;
+	}
+
+	public void setMbz_life_begin(String mbz_life_begin) {
+		this.mbz_life_begin = mbz_life_begin;
+	}
+
+	public String getMbz_life_end() {
+		return mbz_life_end;
+	}
+
+	public void setMbz_life_end(String mbz_life_end) {
+		this.mbz_life_end = mbz_life_end;
+	}
+
+	public String getMbz_life_ended() {
+		return mbz_life_ended;
+	}
+
+	public void setMbz_life_ended(String mbz_life_ended) {
+		this.mbz_life_ended = mbz_life_ended;
+	}
+
+	public String getMbz_arid() {
+		return mbz_arid;
+	}
+
+	public void setMbz_arid(String mbz_arid) {
+		this.mbz_arid = mbz_arid;
+	}
+
 	public int getRecordID() {
 		return recordID;
 	}
@@ -217,6 +291,17 @@ public class Record {
 
 		this.setBound(bound);
 		this.setTimed_out(timed_out);
+	}
+
+	public Record(int recordID, String artist, String title, String part_of,
+			String composer) {
+
+		this.setRecordID(recordID);
+		this.setArtist(artist);
+		this.setTitle(title);
+		this.setPart_of(part_of);
+		this.setComposer(composer);
+
 	}
 
 	public static String getLinkedResourcesQuery(Record record) {
@@ -824,9 +909,9 @@ public class Record {
 	}
 
 	public void checkCategories(String category) {
-		String[] list = { "opera", "operas", "ballet",
-				"musical", "sonata", "concerto", "symphony", "orchestra",
-				"ballets", "composers", "pianists", "classical" };
+		String[] list = { "opera", "operas", "ballet", "musical", "sonata",
+				"concerto", "symphony", "orchestra", "ballets", "composers",
+				"pianists", "classical" };
 		int i = 0;
 		while (this.getClassical() == 0 && i < list.length) {
 			if (category.toLowerCase().contains(list[i])) {
@@ -836,4 +921,10 @@ public class Record {
 		}
 	}
 
+	public void updateMbzArtistinfo(DBManager manager) {
+		manager.updateMbzArtistinfo(this.getRecordID(), this.getMbz_type(),
+				this.getMbz_country(), this.getMbz_disambiguation(),
+				this.getMbz_life_begin(), this.getMbz_life_end(),
+				this.getMbz_life_ended(),this.getMbz_arid());
+	}
 }
