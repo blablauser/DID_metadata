@@ -29,6 +29,29 @@ class DBManager {
 
 	}
 
+	public ArrayList<String> getCategoriesforCastaway(String castawayID) {
+		ArrayList<String> result = new ArrayList<String>();
+		ResultSet rs;
+		try {
+			DBaccess.connect(host, port, user, password, dbname);
+			
+			rs = DBaccess.retrieve(
+					"select category.name from category " +
+					"join classifiedIn on (category.categoryID = classifiedIn.categoryID) " +
+					"join castaway on (castaway.castawayID = classifiedIn.castawayID) " +
+					"where castaway.castawayID = '" + castawayID + "' ");
+			while (rs.next()) {
+				result.add(rs.getString("name"));
+			}
+			
+		} catch (Exception e) {
+		} finally {
+			DBaccess.disconnect();
+			return result;
+		}
+
+	}
+
 	public int exists(String returnField, String tblName, String field,
 			String value) {
 		int id = -1;
@@ -126,6 +149,15 @@ class DBManager {
 	public void flagCastaway(int id, String field, int value) {
 		String q = "UPDATE castaway SET " + field + " = " + value
 				+ " WHERE castawayID = '" + id + "'";
+		DBaccess.connect(host, port, user, password, dbname);
+		DBaccess.update(q);
+		System.err.println("UPDATE: " + q);
+		DBaccess.disconnect();
+	}
+	
+	public void updateCastaway(int id, String field, String value) {
+		String q = "UPDATE castaway SET " + field + " = '" + value
+				+ "' WHERE castawayID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
 		System.err.println("UPDATE: " + q);
@@ -249,6 +281,17 @@ class DBManager {
 			result.add(rs.getString("categories_artist"));
 			result.add(rs.getString("bound"));
 			result.add(rs.getString("timed_out"));
+		
+			result.add(rs.getString("classical")); //15
+			result.add(rs.getString("mbz_type"));
+			result.add(rs.getString("mbz_gender"));
+			result.add(rs.getString("mbz_country"));
+			result.add(rs.getString("mbz_disambiguation"));
+			result.add(rs.getString("mbz_life_begin")); //20
+			result.add(rs.getString("mbz_life_end"));
+			result.add(rs.getString("mbz_life_ended"));
+			result.add(rs.getString("mbz_arid"));
+			result.add(rs.getString("mbz_found"));
 
 		} catch (Exception e) {
 			System.err.println("ERROR: Get Record e.getm: " + e.getMessage());
@@ -259,20 +302,33 @@ class DBManager {
 
 	}
 
-	public void updateMbzArtistinfo(int recordID, String mbz_type,
-			String mbz_country, String mbz_disambiguation,
-			String mbz_life_begin, String mbz_life_end, String mbz_life_ended,
-			String mbz_arid) {
-		// TODO Auto-generated method stub
-		String q = "UPDATE record SET mbz_type = '" + mbz_type
-				+ "', mbz_country= '" + mbz_country + "', mbz_disambiguation='"
-				+ mbz_disambiguation + "', mbz_life_begin='" + mbz_life_begin
-				+ "', mbz_life_end='" + mbz_life_end + "',mbz_life_ended="
-				+ mbz_life_ended + ", mbz_arid='" + mbz_arid
-				+ "' WHERE recordID = '" + recordID + "'";
+	//
+	// public void updateMbzArtistinfo(int recordID, String mbz_type, String
+	// mbz_gender,
+	// String mbz_country, String mbz_disambiguation,
+	// String mbz_life_begin, String mbz_life_end, String mbz_life_ended,
+	// String mbz_arid, int mbz_found) {
+	// // TODO Auto-generated method stub
+	// String q = "UPDATE record SET mbz_type = " + mbz_type
+	// + ", mbz_gender= " + mbz_gender + ", mbz_country= " + mbz_country +
+	// ", mbz_disambiguation="
+	// + mbz_disambiguation + ", mbz_life_begin=" + mbz_life_begin
+	// + ", mbz_life_end=" + mbz_life_end + ",mbz_life_ended="
+	// + mbz_life_ended + ", mbz_arid=" + mbz_arid
+	// + ", mbz_found='"+mbz_found+"' WHERE recordID = '" + recordID + "'";
+	// DBaccess.connect(host, port, user, password, dbname);
+	// DBaccess.update(q);
+	// System.err.println("UPDATE MBZ artist info for record " + recordID + ":"
+	// + q);
+	// DBaccess.disconnect();
+	// }
+	//
+	public void updateMbzArtistinfo(int id, String field, String value) {
+		String q = "UPDATE record SET " + field + " = '" + value
+				+ "' WHERE recordID = '" + id + "'";
 		DBaccess.connect(host, port, user, password, dbname);
 		DBaccess.update(q);
-		System.err.println("UPDATE MBZ artist info for record " + recordID + ":" + q);
+		System.err.println("UPDATE MBZ artist info for record " + id + ":" + q);
 		DBaccess.disconnect();
 	}
 

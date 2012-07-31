@@ -1,17 +1,5 @@
 package didproject;
 
-import java.io.*;
-import java.net.*;
-import java.util.Random;
-
-import javax.xml.parsers.*;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
 //import java.util.ArrayList;
 
 public class MainClass {
@@ -50,10 +38,17 @@ public class MainClass {
 		 * Rachmaninoff!!! ) - but use the fixed queries
 		 * CollectMetadataAboutSongsDBpedia.run();
 		 */
-		// CollectMetadataAboutSongsDBpedia.run();
+
+		/**
+		 * Collect metadata from MusicBrainz :
+		 * 
+		 * getMetaFromMusicBrainz.run(); *
+		 * */
+
 		// GET THE UNIVERSITY FOR PEOPLE.
-		// StringEscape.generateRandom(100, 13110);
-		
+		NormalizeData.castaways();
+		NormalizeData.records();
+		//
 
 	}
 }

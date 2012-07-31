@@ -3,6 +3,7 @@ package didproject;
 import java.util.ArrayList;
 
 public class Person {
+
 	private int id;
 	private String name;
 	private String link;
@@ -14,6 +15,64 @@ public class Person {
 	private int found;
 	private int dangerous;
 	private boolean onDBpedia;
+
+	// ##################################
+
+	private String occupation;
+	private String peopleFrom;
+	private int alumni;
+	private int school;
+	private int high_school;
+	private int masters;
+	private int studies;
+
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+
+	public String getPeopleFrom() {
+		return peopleFrom;
+	}
+
+	public void setPeopleFrom(String peopleFrom) {
+		this.peopleFrom = peopleFrom;
+	}
+
+	public int getAlumni() {
+		return alumni;
+	}
+
+	public void setAlumni(int alumni) {
+		this.alumni = alumni;
+	}
+
+	public int getSchool() {
+		return school;
+	}
+
+	public void setSchool(int school) {
+		this.school = school;
+	}
+
+	public int getHigh_school() {
+		return high_school;
+	}
+
+	public void setHigh_school(int high_school) {
+		this.high_school = high_school;
+	}
+
+	public int getMasters() {
+		return masters;
+	}
+
+	public void setMasters(int masters) {
+		this.masters = masters;
+	}
 
 	private ArrayList<String> categories;
 
@@ -31,6 +90,19 @@ public class Person {
 			this.setOnDBpedia(false);
 		this.setKey("");
 		this.setDangerous(dangerous);
+		/**
+		 * private String occupation; private String peopleFrom; private int
+		 * alumni; private int school; private int high_school; private int
+		 * masters;
+		 */
+		this.setAlumni(0);
+		this.setSchool(0);
+		this.setHigh_school(0);
+		this.setMasters(0);
+		this.setPeopleFrom("");
+		this.setOccupation("");
+		this.setCategories(new ArrayList<String>());
+
 	}
 
 	public Person(int id, String name, String link, String gender,
@@ -190,4 +262,128 @@ public class Person {
 	public void setKey(String description) {
 		this.key = description;
 	}
+
+	public void mainOccupation() {
+		String[] occupationsList = this.occupations.split(";");
+		this.setOccupation(occupationsList[0]);
+	}
+
+	public void resolvePeopleFrom() {
+		int i = 0;
+		while (this.getPeopleFrom().isEmpty()
+				&& i < this.getCategories().size()) {
+
+			if (this.getCategories().get(i).startsWith("People_from_")) {
+				this.setPeopleFrom(this.getCategories().get(i)
+						.substring("People_from_".length()));
+			}
+			i++;
+		}
+
+	}
+
+	public void resolveEducation() {
+		int i = 0;
+		while (this.getHigh_school() == 0 && i < this.getCategories().size()) {
+
+			if (this.getCategories().get(i).endsWith("High_School_alumni")) {
+				this.setHigh_school(1);
+			}
+			i++;
+		}
+
+		i = 0;
+		while (this.getSchool() == 0 && i < this.getCategories().size()) {
+
+			if (this.getCategories().get(i).startsWith("Former_pupils_of_")) {
+				this.setSchool(1);
+			} else {
+				if (this.getCategories().get(i).endsWith("School_alumni")
+						&& !this.getCategories().get(i)
+								.endsWith("High_School_alumni")) {
+					this.setSchool(1);
+				} else {
+					if (this.getCategories().get(i)
+							.startsWith("People_educated_at")) {
+						this.setSchool(1);
+					}
+				}
+			}
+			i++;
+		}
+
+		i = 0;
+		while (this.getMasters() == 0 && i < this.getCategories().size()) {
+
+			if (this.getCategories().get(i).startsWith("Masters_of_")) {
+				this.setMasters(1);
+			}
+			i++;
+		}
+
+		i = 0;
+		while (this.getAlumni() == 0 && i < this.getCategories().size()) {
+
+			if (this.getCategories().get(i).endsWith("_alumni")
+					&& !this.getCategories().get(i)
+							.endsWith("High_School_alumni")
+					&& !this.getCategories().get(i).endsWith("School_alumni")) {
+				this.setAlumni(1);
+			}
+
+			if (this.getAlumni() == 0) {
+				if (this.getCategories().get(i)
+						.startsWith("Former_students_of_"))
+					this.setAlumni(1);
+			}
+			i++;
+		}
+
+	}
+
+	public void resolveAnyEducation() {
+		int i = 0;
+		while (this.getStudies() == 0 && i < this.getCategories().size()) {
+
+			if (this.getCategories().get(i).endsWith("_alumni")
+					|| this.getCategories().get(i).startsWith("Masters_of_")
+					|| this.getCategories().get(i)
+							.startsWith("Former_students_of_")
+					|| this.getCategories().get(i)
+							.startsWith("People_educated_at")
+					|| this.getCategories().get(i)
+							.startsWith("Former_pupils_of_")) {
+				this.setStudies(1);
+			}
+			i++;
+		}
+	}
+
+	public void normalizeCastaway(DBManager manager) {
+		/**
+		 * private String occupation; private String peopleFrom; private int
+		 * alumni; private int school; private int high_school; private int
+		 * masters;
+		 */
+		manager.updateCastaway(this.getId(), "main_occupation",
+				this.getOccupation());
+		manager.updateCastaway(this.getId(), "peopleFrom", this.getPeopleFrom());
+		manager.updateCastaway(this.getId(), "alumni",
+				Integer.toString(this.getAlumni()));
+		manager.updateCastaway(this.getId(), "school",
+				Integer.toString(this.getSchool()));
+		manager.updateCastaway(this.getId(), "high_school",
+				Integer.toString(this.getHigh_school()));
+		manager.updateCastaway(this.getId(), "masters",
+				Integer.toString(this.getMasters()));
+	}
+
+	public void setStudies(int studies) {
+		this.studies = studies;
+	}
+
+	public int getStudies() {
+		return studies;
+	}
+
 }

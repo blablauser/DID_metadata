@@ -30,6 +30,7 @@ public class Record {
 	private String mbz_life_end;
 	private String mbz_life_ended;
 	private String mbz_arid;
+	private int mbz_found;
 
 	public String getMbz_gender() {
 		return mbz_gender;
@@ -294,13 +295,71 @@ public class Record {
 	}
 
 	public Record(int recordID, String artist, String title, String part_of,
-			String composer) {
+			String composer, String releasedOn, String artistURI,
+			String songURI, String artistComment, double genderRatio,
+			String gender, String categories_record, String categories_artist,
+			int bound, int timed_out, int classical, String mbz_type, String mbz_gender,
+			String mbz_country, String mbz_disambiguation,
+			String mbz_life_begin, String mbz_life_end, String mbz_life_ended,
+			String mbz_arid, int mbz_found) {
+
+		this.setClassical(classical);
+		this.setMbz_type(mbz_type);
+		this.setMbz_arid(mbz_arid);
+		this.setMbz_country(mbz_country);
+		this.setMbz_disambiguation(mbz_disambiguation);
+		this.setMbz_found(mbz_found);
+		this.setMbz_gender(mbz_gender);
+		this.setMbz_life_begin(mbz_life_begin);
+		this.setMbz_life_end(mbz_life_ended);
+		this.setMbz_life_ended(mbz_life_ended);
+		
+		this.setRecordID(recordID);
+		this.setArtist(artist);
+		this.setTitle(title);
+		this.setPart_of(part_of);
+		this.setComposer(composer);
+		this.setReleasedOn(releasedOn);
+		this.setArtistURI(StringEscape.unescapeUrl(artistURI));
+		this.setSongURI(StringEscape.unescapeUrl(songURI));
+		this.setArtistComment(artistComment);
+		this.setGenderRatio(genderRatio);
+		this.setGender(gender);
+		this.setGenreList(new ArrayList<String>());
+
+		categories_record = categories_record.replaceAll("\\[", "");
+		categories_record = categories_record.replaceAll("\\]", "");
+
+		String[] var = categories_record.split(",");
+		ArrayList<String> varArray = new ArrayList<String>();
+		for (String s : var) {
+			varArray.add(s);
+		}
+		this.setCategories_record(varArray);
+
+		categories_artist = categories_artist.replaceAll("\\[", "");
+		categories_artist = categories_artist.replaceAll("\\]", "");
+		var = categories_artist.split(",");
+		varArray = new ArrayList<String>();
+		for (String s : var) {
+			varArray.add(s);
+		}
+		this.setCategories_artist(varArray);
+
+		this.setBound(bound);
+		this.setTimed_out(timed_out);
+		
+	}
+
+	public Record(int recordID, String artist, String title, String part_of,
+			String composer, int mbz_found) {
 
 		this.setRecordID(recordID);
 		this.setArtist(artist);
 		this.setTitle(title);
 		this.setPart_of(part_of);
 		this.setComposer(composer);
+		this.setMbz_found(mbz_found);
 
 	}
 
@@ -815,6 +874,14 @@ public class Record {
 		return classical;
 	}
 
+	public void setMbz_found(int mbz_found) {
+		this.mbz_found = mbz_found;
+	}
+
+	public int getMbz_found() {
+		return mbz_found;
+	}
+
 	public static void calculateGender(Record record) {
 		double he = StringEscape.countOccurances(record.getArtistComment()
 				.toLowerCase(), " he ");
@@ -922,9 +989,40 @@ public class Record {
 	}
 
 	public void updateMbzArtistinfo(DBManager manager) {
-		manager.updateMbzArtistinfo(this.getRecordID(), this.getMbz_type(),
-				this.getMbz_country(), this.getMbz_disambiguation(),
-				this.getMbz_life_begin(), this.getMbz_life_end(),
-				this.getMbz_life_ended(),this.getMbz_arid());
+
+		if (this.getMbz_type() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_type",
+					this.getMbz_type());
+
+		if (this.getMbz_gender() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_gender",
+					this.getMbz_gender());
+
+		if (this.getMbz_country() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_country",
+					this.getMbz_country());
+
+		if (this.getMbz_disambiguation() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(),
+					"mbz_disambiguation", this.getMbz_disambiguation());
+
+		if (this.getMbz_life_begin() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_life_begin",
+					this.getMbz_life_begin());
+
+		if (this.getMbz_life_end() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_life_end",
+					this.getMbz_life_end());
+
+		if (this.getMbz_life_ended() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_life_ended",
+					this.getMbz_life_ended());
+
+		if (this.getMbz_arid() != null)
+			manager.updateMbzArtistinfo(this.getRecordID(), "mbz_arid",
+					this.getMbz_arid());
+
+		manager.updateMbzArtistinfo(this.getRecordID(), "mbz_found",
+				Integer.toString(this.getMbz_found()));
 	}
 }

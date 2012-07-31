@@ -24,132 +24,148 @@ public class getMetaFromMusicBrainz {
 			ArrayList<String> fields = new ArrayList<String>();
 			fields = manager.getRecord("record", recordIDs.get(i));
 			record = new Record(Integer.parseInt(fields.get(0)), fields.get(1),
-					fields.get(2), fields.get(3), fields.get(4));
-			try {
-				String urlResponse = StringToXML.UrlToString(baseURL
-						+ "artist/?query=artist:"
-						+ StringEscape.escapeUrlSearch(record.getArtist())
-						+ "/");
-				Document xmlFile = StringToXML.parse(urlResponse);
+					fields.get(2), fields.get(3), fields.get(4),
+					Integer.parseInt(fields.get(24)));
+			if (record.getMbz_found() == 0) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-				if (xmlFile == null)
-					System.out.println("Could not create XML file! Ups.. ");
-				else {
-					NodeList resultList = xmlFile
-							.getElementsByTagName("artist");
-					if (resultList.getLength() == 0) {
-						System.out.println("No results");
+				try {
+					String urlResponse = StringToXML.UrlToString(baseURL
+							+ "artist/?query=artist:"
+							+ StringEscape.escapeUrlSearch(record.getArtist())
+							+ "/");
+					Document xmlFile = StringToXML.parse(urlResponse);
 
-					} else {
-						for (int j = 0; j < resultList.getLength(); j++) {
-							Element artist = (Element) resultList.item(j);
+					if (xmlFile == null)
+						System.out.println("Could not create XML file! Ups.. ");
+					else {
+						NodeList resultList = xmlFile
+								.getElementsByTagName("artist");
+						if (resultList.getLength() == 0) {
+							System.out.println("No results");
 
-							String score = artist.getAttribute("ext:score");
-							String type = artist.getAttribute("type");
-							String id = artist.getAttribute("id");
+						} else {
+							for (int j = 0; j < resultList.getLength(); j++) {
+								Element artist = (Element) resultList.item(j);
 
-							if (score.equals("100")) {
-								// get the artist and update the record
-								record.setMbz_type(type);
-								record.setMbz_arid(id);
-								NodeList artist_gender = artist
-										.getElementsByTagName("gender");
-								if (artist_gender.getLength() != 0) {
-									NodeList gender = artist_gender.item(0)
-											.getChildNodes();
-									Node child = gender.item(0);
-									while (child.getNodeType() != Node.TEXT_NODE)
-										child = child.getNextSibling();
-									System.out.println("Gender:"
-											+ child.getNodeValue());
-									record.setMbz_gender(child.getNodeValue());
-								}
+								String score = artist.getAttribute("ext:score");
+								String type = artist.getAttribute("type");
+								String id = artist.getAttribute("id");
 
-								NodeList artist_country = artist
-										.getElementsByTagName("country");
-								if (artist_country.getLength() != 0) {
-									NodeList country = artist_country.item(0)
-											.getChildNodes();
-									Node child = country.item(0);
-									while (child.getNodeType() != Node.TEXT_NODE)
-										child = child.getNextSibling();
-									System.out.println("Country:"
-											+ child.getNodeValue());
-									record.setMbz_country(child.getNodeValue());
-								}
-
-								NodeList artist_disambiguation = artist
-										.getElementsByTagName("disambiguation");
-								if (artist_disambiguation.getLength() != 0) {
-									NodeList list = artist_disambiguation.item(
-											0).getChildNodes();
-									Node child = list.item(0);
-									while (child.getNodeType() != Node.TEXT_NODE)
-										child = child.getNextSibling();
-									System.out.println("disambiguation:"
-											+ child.getNodeValue());
-									record.setMbz_disambiguation(child
-											.getNodeValue());
-								}
-
-								NodeList artistLifeSpan = artist
-										.getElementsByTagName("life-span");
-								if (artistLifeSpan.getLength() != 0) {
-									Element lifeSpan = (Element) artistLifeSpan
-											.item(0);
-
-									NodeList begin_life_span = lifeSpan
-											.getElementsByTagName("begin");
-									if (begin_life_span.getLength() != 0) {
-										NodeList list = begin_life_span.item(0)
+								if (score.equals("100")) {
+									record.setMbz_found(1);
+									// get the artist and update the record
+									record.setMbz_type(type);
+									record.setMbz_arid(id);
+									NodeList artist_gender = artist
+											.getElementsByTagName("gender");
+									if (artist_gender.getLength() != 0) {
+										NodeList gender = artist_gender.item(0)
 												.getChildNodes();
-										Node child = list.item(0);
+										Node child = gender.item(0);
 										while (child.getNodeType() != Node.TEXT_NODE)
 											child = child.getNextSibling();
-										System.out.println("begin life-span:"
-												+ child.getNodeValue());
-										record.setMbz_life_begin(child
+										// System.out.println("Gender:"
+										// + child.getNodeValue());
+										record.setMbz_gender(child
 												.getNodeValue());
 									}
 
-									NodeList end_life_span = lifeSpan
-											.getElementsByTagName("end");
-									if (end_life_span.getLength() != 0) {
-										NodeList list = end_life_span.item(0)
-												.getChildNodes();
-										Node child = list.item(0);
+									NodeList artist_country = artist
+											.getElementsByTagName("country");
+									if (artist_country.getLength() != 0) {
+										NodeList country = artist_country.item(
+												0).getChildNodes();
+										Node child = country.item(0);
 										while (child.getNodeType() != Node.TEXT_NODE)
 											child = child.getNextSibling();
-										System.out.println("end life-span:"
-												+ child.getNodeValue());
-										record.setMbz_life_end(child
+										// System.out.println("Country:"
+										// + child.getNodeValue());
+										record.setMbz_country(child
 												.getNodeValue());
 									}
-									
-									NodeList ended_life_span = lifeSpan
-											.getElementsByTagName("ended");
-									if (ended_life_span.getLength() != 0) {
-										NodeList list = ended_life_span.item(0)
-												.getChildNodes();
+
+									NodeList artist_disambiguation = artist
+											.getElementsByTagName("disambiguation");
+									if (artist_disambiguation.getLength() != 0) {
+										NodeList list = artist_disambiguation
+												.item(0).getChildNodes();
 										Node child = list.item(0);
 										while (child.getNodeType() != Node.TEXT_NODE)
 											child = child.getNextSibling();
-										System.out.println("ended life-span:"
-												+ child.getNodeValue());
-										record.setMbz_life_ended(child
+										// System.out.println("disambiguation:"
+										// + child.getNodeValue());
+										record.setMbz_disambiguation(child
 												.getNodeValue());
+									}
+
+									NodeList artistLifeSpan = artist
+											.getElementsByTagName("life-span");
+									if (artistLifeSpan.getLength() != 0) {
+										Element lifeSpan = (Element) artistLifeSpan
+												.item(0);
+
+										NodeList begin_life_span = lifeSpan
+												.getElementsByTagName("begin");
+										if (begin_life_span.getLength() != 0) {
+											NodeList list = begin_life_span
+													.item(0).getChildNodes();
+											Node child = list.item(0);
+											while (child.getNodeType() != Node.TEXT_NODE)
+												child = child.getNextSibling();
+											// System.out.println("begin life-span:"
+											// + child.getNodeValue());
+											record.setMbz_life_begin(child
+													.getNodeValue());
+										}
+
+										NodeList end_life_span = lifeSpan
+												.getElementsByTagName("end");
+										if (end_life_span.getLength() != 0) {
+											NodeList list = end_life_span.item(
+													0).getChildNodes();
+											Node child = list.item(0);
+											while (child.getNodeType() != Node.TEXT_NODE)
+												child = child.getNextSibling();
+											// System.out.println("end life-span:"
+											// + child.getNodeValue());
+											record.setMbz_life_end(child
+													.getNodeValue());
+										}
+
+										NodeList ended_life_span = lifeSpan
+												.getElementsByTagName("ended");
+										if (ended_life_span.getLength() != 0) {
+											NodeList list = ended_life_span
+													.item(0).getChildNodes();
+											Node child = list.item(0);
+											while (child.getNodeType() != Node.TEXT_NODE)
+												child = child.getNextSibling();
+											// System.out.println("ended life-span:"
+											// + child.getNodeValue());
+											record.setMbz_life_ended(child
+													.getNodeValue());
+										}
 									}
 								}
 							}
 						}
-					}
 
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+				// TODO update DB!!!
+
+				record.updateMbzArtistinfo(manager);
+				System.out
+						.println("##################################################################################");
 			}
-			//TODO update DB!!!
-			//record.updateMbzArtistinfo(manager);
 		}
 
 	}

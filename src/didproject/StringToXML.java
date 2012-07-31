@@ -28,7 +28,7 @@ public class StringToXML {
 
 	public static String UrlToString(String urlString) {
 		try {
-			System.out.println(urlString);
+			//System.out.println(urlString);
 			URL url = new URL(urlString);
 
 			@SuppressWarnings("unused")
@@ -39,7 +39,7 @@ public class StringToXML {
 			String inputLine;
 			String xmlString = "";
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println(inputLine);
+				//System.out.println(inputLine);
 				xmlString += inputLine;
 			}
 
